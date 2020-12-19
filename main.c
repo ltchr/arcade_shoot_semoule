@@ -2,51 +2,28 @@
 * 
 */
 
-#include <stdlib.h> // Pour pouvoir utiliser exit()
-#include <stdio.h> // Pour pouvoir utiliser printf()
-#include <math.h> // cos
+
 #include "lib/GfxLib.h" // Seul cet include est necessaire pour faire du graphique
 #include "lib/BmpLib.h" // Cet include permet de manipuler des fichiers BMP
 #include "lib/ESLib.h" // Pour utiliser valeurAleatoire()
 
 //#include "joueur.h"
-#include "lib/def.h"
-#include "lib/struct.h"
+#include "common.h"
+#include "bullets.c"
 
 void gestionEvenement(EvenementGfx evenement);
-void cercle(float centreX, float centreY, float rayon);
 void showScore();
 void clear(Level* levels); // clear the malloc of levels
 void showShip(int x, int y, int w, int h); 
 void moveShip(Ship *ship); // move the ship to a direction
-void moveBullet(Bullet** bullets); 
-void resize(Bullet** bullets); // increase the bullets size array
-void newBullet(Bullet** bullets, Ship ship); // create a bullet where the ship is
-void showBullet(int x, int y); // show bullet at a x y
 
-void cercle(float centreX, float centreY, float rayon){
-	const int Pas = 20; // Nombre de secteurs pour tracer le cercle
-	const double PasAngulaire = 2.*M_PI/Pas;
-	for (int index = 0; index < Pas; ++index){
-		const double angle = 2.*M_PI*index/Pas; // on calcule l'angle de depart du secteur
-		triangle(centreX, centreY,
-				 centreX+rayon*cos(angle), centreY+rayon*sin(angle),
-				 centreX+rayon*cos(angle+PasAngulaire), centreY+rayon*sin(angle+PasAngulaire));
-	}		
-}
 
 void clear(Level* levels){
 	free(levels);
 	levels = NULL;
 }
 
-void newBullet(Bullet** bullets, Ship ship){
-	int len = (sizeof(bullets)/sizeof(bullets[0]));
-	bullets[len]->x = ship.x;
-	bullets[len]->y = ship.y;
-	bullets[len]->del = false;
-	bullets[len]->damage = 25;
-}
+
 
 void moveShip(Ship *ship){
 	ship->x += ship->xdir * ship->speed;
@@ -56,22 +33,11 @@ void moveShip(Ship *ship){
 	ship->ydir = 0;
 }
 
-void moveBullet(Bullet** bullets){
-
-}
-
-void showScore(int score){
+void showScore(/*int score*/){
 	//printf("score %d\n", score);
 }
 
-void resize(Bullet** bullets){
-    *bullets = realloc(*bullets, sizeof(Bullet));
-}
 
-void showBullet(int x, int y){
-	couleurCourante(150, 0, 50);
-	cercle(x, y, 10);
-}
 
 void showShip(int x, int y, int w, int h){
 	couleurCourante(255, 160, 160);
@@ -105,10 +71,15 @@ void gestionEvenement(EvenementGfx evenement)
 	if (levels == NULL){
 		levels = (Level*)malloc(qtLevel*sizeof(Level));
 	}
-	static Bullet *bullets = NULL;
+	/*static Bullet *bullets = NULL;
 	if (bullets == NULL){
-		bullets = (Bullet*)malloc(sizeof(Bullet));
+		bullets = (Bullet*)malloc(20*sizeof(Bullet));
 	}
+	if (bullets == NULL || levels == NULL){
+		printf("malloc null\n");
+		exit(EXIT_FAILURE);
+	}
+	*/
 
 	switch (evenement)
 	{
@@ -140,7 +111,7 @@ void gestionEvenement(EvenementGfx evenement)
 					levels[i].virus[j].life = 100;
 				}
 			}
-
+			initBullets();
 
 /*			PosXY pos;
 			pos.x = largeurFenetre()/2;
@@ -161,12 +132,7 @@ void gestionEvenement(EvenementGfx evenement)
 		case Affichage:			
 			effaceFenetre (255, 255, 255);
 			if (!gameover && !levels[currentLevel].allDead){
-				int len = sizeof(bullets)/sizeof(bullets[0]);
-				//printf("*****len %d\n", len);
-				for (int i = 0; i < len; ++i){
-					showBullet(largeurFenetre()/2, hauteurFenetre()/2);
-					//showBullet(ship.x, ship.y);
-				}
+				
 				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
 					showShip(levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height);
 				}
@@ -199,8 +165,8 @@ void gestionEvenement(EvenementGfx evenement)
 				ship.xdir -= 1;
 			}
 			if(caractereClavier() == ' '){
-				//resize(&bullets);
-				//newBullet(&bullets, ship);
+
+			//	newBullet(&bullets, ship);
 			}
 			switch (caractereClavier())
 			{

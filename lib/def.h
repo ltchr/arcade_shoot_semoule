@@ -6,6 +6,5 @@
 
 
 
-
 // enum de l etat du jeu 
 // enum state{STATU_OK, STATUT_GAMEOVER, etc...}
