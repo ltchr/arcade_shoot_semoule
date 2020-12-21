@@ -102,6 +102,7 @@ typedef void (*FonctionCharDeuxInts)(unsigned char a, int b, int c);
 
 /* Memorise le dernier caractere clavier qui a ete genere */
 static GLubyte sCaractereClavier = ' ';
+static bool sEtatCharacterClavier = false;
 /* Memorise la derniere touche speciale du clavier qui a ete pressee */
 static int sToucheClavier = ' ';
 /* Memorise la derniere action sur un bouton de la souris */
@@ -133,6 +134,8 @@ static float sEpaisseurDeTrait = 1.f;
 static FonctionVide sFonctionAffichage = (FonctionVide)NULL;
 /* Valeur de la callback de gestion du clavier */
 static FonctionCharDeuxInts sFonctionClavier = (FonctionCharDeuxInts)NULL;
+
+static FonctionCharDeuxInts sFonctionClavierUp = (FonctionCharDeuxInts)NULL;
 /* Valeur de la callback de gestion des touches speciales du clavier */
 static FonctionTroisInts sFonctionClavierSpecial = (FonctionTroisInts)NULL;
 /* Valeur de la callback de gestion des boutons souris */
@@ -153,6 +156,8 @@ extern void gestionEvenement(EvenementGfx evenement);
 static void fonctionAffichage(void);
 /* Fonction callback par defaut appelee lors de l'appui sur une touche du clavier */
 static void fonctionClavier(GLubyte caractere, int xSouris, int ySouris);
+
+static void fonctionClavierUp(GLubyte caractere, int xSouris, int ySouris);
 /* Fonction callback par defaut appelee lors de l'appui sur une touche speciale du clavier */
 static void fonctionClavierSpecial(int codeTouche, int xSouris, int ySouris);
 /* Fonction callback par defaut appelee lors d'un clic de bouton souris */
@@ -215,6 +220,7 @@ static void prepareFenetre_En_DeTaille(const char *nom, int xCoinHautGauche, int
 	if (sFonctionAffichage == NULL) sFonctionAffichage = fonctionAffichage;
 	/* La fonction de gestion d'inactivite n'est pas geree par defaut car elle consomme trop de ressources */
 	if (sFonctionClavier == NULL) sFonctionClavier = fonctionClavier;
+	if (sFonctionClavierUp == NULL) sFonctionClavierUp = fonctionClavierUp;
 	if (sFonctionClavierSpecial == NULL) sFonctionClavierSpecial = fonctionClavierSpecial;
 	if (sFonctionBoutonsSouris == NULL) sFonctionBoutonsSouris = fonctionBoutonsSouris;
 	if (sFonctionDeplacementSouris == NULL) sFonctionDeplacementSouris = fonctionDeplacementSouris;
@@ -254,6 +260,7 @@ void lanceBoucleEvenements(void)
 	/* Positionne les callbacks */
 	glutDisplayFunc(sFonctionAffichage);
 	glutKeyboardFunc(sFonctionClavier);
+	glutKeyboardUpFunc(sFonctionClavierUp);
 	glutSpecialFunc(sFonctionClavierSpecial);
 	glutMouseFunc(sFonctionBoutonsSouris);
 	glutMotionFunc(sFonctionDeplacementSouris);
@@ -582,6 +589,12 @@ char caractereClavier(void)
 	return (char)sCaractereClavier;
 }
 
+/* Renvoie le dernier caractere clavier traite par l'evenement Clavier */
+bool etatCharacterClavier(void)
+{
+	return (bool)sEtatCharacterClavier;
+}
+
 /* Renvoie la derniere touche speciale du clavier traitee par l'evenement ClavierSpecial */
 int toucheClavier(void)
 {
@@ -685,6 +698,26 @@ static void fonctionClavier(GLubyte caractere, int xSouris, int ySouris)
 {
 	/* On memorise le caractere et la position graphique (et pas fenetre) de la souris pour pouvoir les fournir par la suite */
 	sCaractereClavier = caractere;
+	sEtatCharacterClavier = true;
+#ifdef ACTION_CLAVIER_MEMORISE_POSITION_SOURIS
+	sAbscisseSouris = xSouris;
+	sOrdonneeSouris = sHauteurFenetre-ySouris;
+#endif
+
+//	On memorise l'etat des modificateurs Shift, Ctrl et Alt
+//	sAppuiToucheShift = (glutGetModifiers ()&GLUT_ACTIVE_SHIFT) != 0;
+//	sAppuiToucheCtrl = (glutGetModifiers ()&GLUT_ACTIVE_CTRL) != 0;
+//	sAppuiToucheAlt = (glutGetModifiers ()&GLUT_ACTIVE_ALT) != 0;
+
+	/* Puis on appelle la fonction generique de gestion des evenements */
+	gestionEvenement(Clavier);
+}
+
+static void fonctionClavierUp(GLubyte caractere, int xSouris, int ySouris)
+{
+	/* On memorise le caractere et la position graphique (et pas fenetre) de la souris pour pouvoir les fournir par la suite */
+	sCaractereClavier = caractere;
+	sEtatCharacterClavier = false;
 #ifdef ACTION_CLAVIER_MEMORISE_POSITION_SOURIS
 	sAbscisseSouris = xSouris;
 	sOrdonneeSouris = sHauteurFenetre-ySouris;

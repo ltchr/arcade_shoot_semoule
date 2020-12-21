@@ -17,6 +17,10 @@ void clear(Level* levels); // clear the malloc of levels
 void showShip(int x, int y, int w, int h); 
 void moveShip(Ship *ship); // move the ship to a direction
 
+int tZ = 0;
+int tQ = 0;
+int tS = 0;
+int tD = 0;
 
 void clear(Level* levels){
 	free(levels);
@@ -129,7 +133,12 @@ void gestionEvenement(EvenementGfx evenement)
 			rafraichisFenetre();
 			break;
 			
-		case Affichage:			
+		case Affichage:
+		
+			ship.ydir += 5*(tZ+tS);
+			ship.xdir += 5*(tD+tQ);
+			
+		
 			effaceFenetre (255, 255, 255);
 			if (!gameover && !levels[currentLevel].allDead){
 				
@@ -151,7 +160,54 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Clavier:
-			printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
+			printf("Etat: %d",etatCharacterClavier());
+			printf("Touche: %d",caractereClavier());
+			
+			if(etatCharacterClavier()) {
+				switch(caractereClavier()) {
+					case 'z':
+					case 'Z':
+						tZ = 1; break;
+						
+					case 'q':
+					case 'Q':
+						tQ = -1; break;
+						
+					case 's':
+					case 'S':
+						tS = -1; break;
+						
+					case 'd':
+					case 'D':
+						tD = 1; break;
+				}
+			}
+			else {
+				switch(caractereClavier()) {
+					case 'z':
+					case 'Z':
+						tZ = 0; 
+						break;
+						
+					case 'q':
+					case 'Q':
+						tQ = 0; 
+						break;
+						
+					case 's':
+					case 'S':
+						tS = 0; 
+						break;
+						
+					case 'd':
+					case 'D':
+						tD = 0; 
+						break;
+				}
+			}
+			
+			/*
+			//printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
 			if(caractereClavier() == 'z' || caractereClavier() == 'Z'){
 				ship.ydir += 1;
 			}
@@ -168,9 +224,10 @@ void gestionEvenement(EvenementGfx evenement)
 
 			//	newBullet(&bullets, ship);
 			}
+			
 			switch (caractereClavier())
 			{
-				/*
+				
 				case 'Z':
 				case 'z':
 					ship.ydir = 1;
@@ -187,7 +244,7 @@ void gestionEvenement(EvenementGfx evenement)
 				case 'd':
 					ship.xdir = 1;
 				break;
-*/
+
 				case 'P':
 				case 'p':
 					termineBoucleEvenements();
@@ -222,6 +279,7 @@ void gestionEvenement(EvenementGfx evenement)
 					demandeTemporisation(-1);
 					break;
 			}
+			*/
 			break;
 			
 		case ClavierSpecial:
