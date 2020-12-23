@@ -17,10 +17,24 @@ void clear(Level* levels); // clear the malloc of levels
 void showShip(int x, int y, int w, int h); 
 void moveShip(Ship *ship); // move the ship to a direction
 
+//Etats touches mouvement
 int tZ = 0;
 int tQ = 0;
 int tS = 0;
 int tD = 0;
+
+static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
+static bool gameover = false;
+static int score;
+static int Hscore;
+
+static Ship ship; 
+
+int qtLevel = 2;
+static int currentLevel = 1;
+static Level *levels = NULL;
+
+static Bullet *bullets;
 
 void clear(Level* levels){
 	free(levels);
@@ -62,16 +76,7 @@ int main(int argc, char **argv)
 // des qu'un evenement survient
 void gestionEvenement(EvenementGfx evenement)
 {
-	static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
-	static bool gameover = false;
-	static int score;
-	static int Hscore;
-	
-	static Ship ship; 
-	
-	int qtLevel = 2;
-	static int currentLevel = 1;
-	static Level *levels = NULL;
+
 	if (levels == NULL){
 		levels = (Level*)malloc(qtLevel*sizeof(Level));
 	}
@@ -115,7 +120,7 @@ void gestionEvenement(EvenementGfx evenement)
 					levels[i].virus[j].life = 100;
 				}
 			}
-			initBullets();
+			bullets = initBullets();
 
 /*			PosXY pos;
 			pos.x = largeurFenetre()/2;
@@ -135,18 +140,21 @@ void gestionEvenement(EvenementGfx evenement)
 			
 		case Affichage:
 		
-			ship.ydir += 5*(tZ+tS);
-			ship.xdir += 5*(tD+tQ);
+			//Gestion direction mouvement
+			ship.ydir += (tZ+tS);
+			ship.xdir += (tD+tQ);
 			
 		
 			effaceFenetre (255, 255, 255);
 			if (!gameover && !levels[currentLevel].allDead){
-				
+				moveBullet(bullets);
+				drawBullets(bullets);
 				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
 					showShip(levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height);
 				}
-				showShip(ship.x, ship.y, ship.width, ship.height);			
 				moveShip(&ship);
+				showShip(ship.x, ship.y, ship.width, ship.height);			
+				
 				showScore(score);
 			}else{
 
@@ -160,8 +168,8 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Clavier:
-			printf("Etat: %d",etatCharacterClavier());
-			printf("Touche: %d",caractereClavier());
+			printf("Etat: %d\n",etatCharacterClavier());
+			printf("Touche: %d\n",caractereClavier());
 			
 			if(etatCharacterClavier()) {
 				switch(caractereClavier()) {
@@ -180,6 +188,21 @@ void gestionEvenement(EvenementGfx evenement)
 					case 'd':
 					case 'D':
 						tD = 1; break;
+						
+					case ' ':
+						
+						//newBullet(ship.x, ship.y)
+						;
+						int i = 0;
+						for(; i < INITIAL_BULLET_DRAW_CAPACITY; i++) {
+							if(bullets[i].del == true) {
+								break;
+							}
+						}
+						bullets[i] = newBullet(ship.x, ship.y, true);
+						
+						
+						break;
 				}
 			}
 			else {
@@ -207,19 +230,7 @@ void gestionEvenement(EvenementGfx evenement)
 			}
 			
 			/*
-			//printf("%c : ASCII %d\n", caractereClavier(), caractereClavier());
-			if(caractereClavier() == 'z' || caractereClavier() == 'Z'){
-				ship.ydir += 1;
-			}
-			if(caractereClavier() == 's' || caractereClavier() == 'S'){
-				ship.ydir -= 1;
-			}
-			if(caractereClavier() == 'd' || caractereClavier() == 'D'){
-				ship.xdir += 1;
-			}
-			if(caractereClavier() == 'q' || caractereClavier() == 'Q'){
-				ship.xdir -= 1;
-			}
+
 			if(caractereClavier() == ' '){
 
 			//	newBullet(&bullets, ship);

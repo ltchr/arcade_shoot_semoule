@@ -1,6 +1,6 @@
 #include "bullets.h"
 
-static Bullet **bullets;
+//static Bullet *bullets;
 static int drawCapacity;
 
 
@@ -16,12 +16,24 @@ void cercle(float centreX, float centreY, float rayon){
 }
 
 
-void initBullets(void){
+Bullet *initBullets(void){
+	
+	Bullet tempbul;
+	tempbul.x = 0;
+	tempbul.y = 0;
+	tempbul.del = true;
+	tempbul.ally = true;
+	tempbul.damage = 0;
+	
+	Bullet *bullets;
 	drawCapacity = INITIAL_BULLET_DRAW_CAPACITY;
 	bullets = (Bullet*)malloc(drawCapacity*sizeof(Bullet));
-	memset(bullets, 0, sizeof(Bullet*) * drawCapacity);
+	for(int i = 0; i < INITIAL_BULLET_DRAW_CAPACITY; i++) {
+		bullets[i] = tempbul;
+	}
+	return bullets;
 }
-
+/*
 void *resize(void *array, int oldSize, int newSize){
 	//*bullets = realloc(*bullets, sizeof(Bullet));
 	void **newArray;
@@ -42,36 +54,55 @@ void resizeDrawList(void){
 	printf("## Resize bullets capacity %d -> %d\n", drawCapacity, n);
 	drawCapacity = n;
 }
+*/
+Bullet newBullet(int x, int y, bool isAlly){
+	Bullet b;
 
-Bullet *newBullet(int x, int y){
-	Bullet *b;
+	//b = malloc(sizeof(Bullet));
+	//memset(b, 0, sizeof(Bullet));
 
-	b = malloc(sizeof(Bullet));
-	memset(b, 0, sizeof(Bullet));
-
-	b->x = x;
-	b->y = y;
-	b->del = false;
-	b->damage = 25;
+	b.x = x;
+	b.y = y;
+	b.del = false;
+	b.ally = isAlly;
+	b.damage = 25;
 
 	return b;
 }
 
-//void moveBullet(Bullet** bullets); 
+void moveBullet(Bullet *bullets) {
+	int i;
+	
+	for (i = 0; i < INITIAL_BULLET_DRAW_CAPACITY; i++){
+		if(bullets[i].del == false) {
+			if(bullets[i].ally) {
+				bullets[i].y += 10;
+			}
+			else {
+				bullets[i].y -= 10;
+			}
+		}
+	}
+}
 
 
-void checkCollisions(/*Bullet *b*/){
+void checkCollisions(Bullet *bullets){
 
 }
 
-void drawBullets(void){
+void drawBullets(Bullet *bullets){
 	int i;
-	Bullet *b;
-	//int len = sizeof(bullets)/sizeof(bullets[0]);
-	//printf("*****len %d\n", len);
-	for (i = 0, b = bullets[i]; b != NULL; b = bullets[++i]){
-		showBullet(largeurFenetre()/2, hauteurFenetre()/2);
-		//showBullet(ship.x, ship.y);
+	
+	for (i = 0; i < INITIAL_BULLET_DRAW_CAPACITY; i++){
+		if(bullets[i].del == false) {
+			if(bullets[i].ally) {
+				bullets[i].y += 10;
+			}
+			else {
+				bullets[i].y -= 10;
+			}
+			showBullet(bullets[i].x, bullets[i].y);
+		}
 	}
 }
 
@@ -80,8 +111,9 @@ void showBullet(int x, int y){
 	couleurCourante(150, 0, 50);
 	cercle(x, y, 10);
 }
-
+/*
 void destroyBullets(void){
 	free(bullets);
 	bullets = NULL;
 }
+*/

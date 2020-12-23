@@ -33,7 +33,8 @@ typedef struct BULLET_STRUCT
 	int y;
 	int xdir;
 	int ydir;
-	int del;
+	bool del;
+	bool ally;
 	int damage;
 
 } Bullet;
