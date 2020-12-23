@@ -10,57 +10,45 @@
 //#include "joueur.h"
 #include "common.h"
 #include "bullets.c"
+#include "ship.c"
 
 void gestionEvenement(EvenementGfx evenement);
 void showScore();
 void clear(Level* levels); // clear the malloc of levels
-void showShip(int x, int y, int w, int h); 
-void moveShip(Ship *ship); // move the ship to a direction
 
-//Etats touches mouvement
-int tZ = 0;
-int tQ = 0;
-int tS = 0;
-int tD = 0;
+// Etats touches mouvement
+static int tZ = 0;
+static int tQ = 0;
+static int tS = 0;
+static int tD = 0;
 
-static bool pleinEcran = false; // Pour savoir si on est en mode plein ecran ou pas
+//static bool pleinEcran = false;
 static bool gameover = false;
 static int score;
 static int Hscore;
 
 static Ship ship; 
 
-int qtLevel = 2;
+static int qtLevel = 2;
 static int currentLevel = 1;
 static Level *levels = NULL;
 
 static Bullet *bullets;
 
+static DonneesImageRGB *spaceShipSprite = NULL;
+static DonneesImageRGB *virusSprite = NULL;
+
 void clear(Level* levels){
 	free(levels);
 	levels = NULL;
-}
-
-
-
-void moveShip(Ship *ship){
-	ship->x += ship->xdir * ship->speed;
-	ship->y += ship->ydir * ship->speed;
-
-	ship->xdir = 0;
-	ship->ydir = 0;
+	libereDonneesImageRGB(&spaceShipSprite);
+	libereDonneesImageRGB(&virusSprite);
 }
 
 void showScore(/*int score*/){
 	//printf("score %d\n", score);
 }
 
-
-
-void showShip(int x, int y, int w, int h){
-	couleurCourante(255, 160, 160);
-	rectangle(x, y, x+w, y+h);
-}
 
 int main(int argc, char **argv)
 {
@@ -77,18 +65,10 @@ int main(int argc, char **argv)
 void gestionEvenement(EvenementGfx evenement)
 {
 
+
 	if (levels == NULL){
 		levels = (Level*)malloc(qtLevel*sizeof(Level));
 	}
-	/*static Bullet *bullets = NULL;
-	if (bullets == NULL){
-		bullets = (Bullet*)malloc(20*sizeof(Bullet));
-	}
-	if (bullets == NULL || levels == NULL){
-		printf("malloc null\n");
-		exit(EXIT_FAILURE);
-	}
-	*/
 
 	switch (evenement)
 	{
@@ -96,23 +76,20 @@ void gestionEvenement(EvenementGfx evenement)
 			score = 0;
 			Hscore = 0;
 
-			//Ship init
-			ship.x = largeurFenetre()/2;
-			ship.y = 0;
-			ship.xdir = 0;
-			ship.ydir = 0;
-			ship.width = 20;
-			ship.height = 30;
-			ship.life = 100;
-			ship.speed = 3;
+		//	spaceShipSprite = lisBMPRGB("../img/ISEN.bmp");
+			spaceShipSprite = lisBMPRGB("../img/Main_character.bmp");
+			virusSprite = lisBMPRGB("../img/virus.bmp");
+
+			ship = initShip();
+
 			// Init levels
 			for (int i = 0; i < qtLevel; ++i){
 				levels[i].qtVirusPerLvl = (i + 1)*3;
 				levels[i].hasBoss = false;
 				levels[i].allDead = false;
 				for (int j = 0; j < levels[i].qtVirusPerLvl; ++j){
-					levels[i].virus[j].x = j*100;
-					levels[i].virus[j].y = (int)hauteurFenetre()*0.9;
+					levels[i].virus[j].x = j*150;
+					levels[i].virus[j].y = (int)hauteurFenetre()*0.7;
 					levels[i].virus[j].xdir = 0;
 					levels[i].virus[j].ydir = -1;
 					levels[i].virus[j].width = 20;
@@ -129,9 +106,7 @@ void gestionEvenement(EvenementGfx evenement)
 			Joueur* joueur = new_joueur(pos, 10.0f, 10.0f);
 			joueur->move((Entite*)joueur, pos, 5.0f, 5.0f);
 */
-
-
-			demandeTemporisation(20);
+			demandeTemporisation(FPS);
 			break;
 		
 		case Temporisation:
@@ -139,25 +114,24 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Affichage:
+			effaceFenetre (255, 255, 255);
 		
 			//Gestion direction mouvement
 			ship.ydir += (tZ+tS);
 			ship.xdir += (tD+tQ);
 			
 		
-			effaceFenetre (255, 255, 255);
 			if (!gameover && !levels[currentLevel].allDead){
 				moveBullet(bullets);
 				drawBullets(bullets);
 				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
-					showShip(levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height);
+					showShip(levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, virusSprite);
 				}
 				moveShip(&ship);
-				showShip(ship.x, ship.y, ship.width, ship.height);			
+				showShip(ship.x, ship.y, spaceShipSprite);			
 				
 				showScore(score);
 			}else{
-
 				if(score > Hscore){
 					Hscore = score;
 				}
@@ -190,8 +164,6 @@ void gestionEvenement(EvenementGfx evenement)
 						tD = 1; break;
 						
 					case ' ':
-						
-						//newBullet(ship.x, ship.y)
 						;
 						int i = 0;
 						for(; i < INITIAL_BULLET_DRAW_CAPACITY; i++) {

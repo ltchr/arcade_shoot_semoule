@@ -6,5 +6,5 @@ C_FLAGS = -g   -Wall -Wextra -pedantic
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/isen/Bureau/ProjetC/arcade_shoot_semoule/build -I/home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib 
+C_INCLUDES = -I/home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/build -I/home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib 
 

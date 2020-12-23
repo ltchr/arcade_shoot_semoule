@@ -1,4 +1,4 @@
-# Install script for directory: /home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib
+# Install script for directory: /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

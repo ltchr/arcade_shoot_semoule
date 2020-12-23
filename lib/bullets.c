@@ -35,7 +35,7 @@ Bullet *initBullets(void){
 }
 /*
 void *resize(void *array, int oldSize, int newSize){
-	//*bullets = realloc(*bullets, sizeof(Bullet));
+	// *bullets = realloc(*bullets, sizeof(Bullet));
 	void **newArray;
 	int copySize;
 	copySize = newSize > oldSize ? oldSize : newSize;
@@ -86,7 +86,7 @@ void moveBullet(Bullet *bullets) {
 }
 
 
-void checkCollisions(Bullet *bullets){
+void checkCollisions(/*Bullet *bullets*/){
 
 }
 
@@ -109,7 +109,7 @@ void drawBullets(Bullet *bullets){
 
 void showBullet(int x, int y){
 	couleurCourante(150, 0, 50);
-	cercle(x, y, 10);
+	cercle(x, y, 5);
 }
 /*
 void destroyBullets(void){

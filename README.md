@@ -1,11 +1,31 @@
-http://en.wikipedia.org/wiki/Opaque_pointer#C
+# ![Shoot The Virus](img/spaceship.png) 
 
-#cmake uses build and running
-cd build/
-cmake -I/lib ..
-cmake --build .
-./main
+Arcade 2D game in C with Gfxlib.
 
+
+## What's Shoot The Virus
+It's a game inspired from space invaders developped in C with Gfxlib.
+A french library based on Opengl.
+Your goal is to reach the highest score by surviving and killing viruses.
+Be ready to fight epic boss.
+Save us from the pandemic and kill all the viruses.
+
+
+## Features
+Incomming
+
+## Development process
+Tested on Linux Mint 19.x, 20.x, Ubuntu.
+
+Install cmake
+Compile and run from the source directory
+```shell
+$ ./run
+```
+
+
+## Screenshots
+![Spaceship](img/spaceship.png)
 
 Debug build
 cmake -DCMAKE_BUILD_TYPE=Debug <path>
@@ -14,20 +34,11 @@ Release build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo <path>
 
 
-
-#Upcoming warning for debug?
-    Werror: Treat warnings as errors. I like this one because it forces me to fix warnings. Also it makes it impossible to miss a warning. Without that flag a warning is generated when compiling, but you might miss it. Later compilation doesn’t touch that file again, so the warnings is not emitted again.
-
-    -pedantic-errors: This enables strict standard conformance, basically. Note that this is not equivalent to -Werror -pedantic, because why would it?
-
-    -Wall: A better name would be -Wcommon. It enables common warnings like use of uninitialized variables.
-
-    -Wextra: Some more common warnings not enabled by -Wall.
-
-    -Wconversion: Enables warnings about conversions that might change the value like float to int.
-
-    -Wsign-conversion: Enables warnings about conversions between signed and unsigned. Somewhat annoying, but still useful. Note that it is not covered by -Wconversion in C++ mode (for some reason).
+## License
+Incomming
 
 
-#Sources
+
+## Sources
 https://github.com/ttroy50/cmake-examples
+http://en.wikipedia.org/wiki/Opaque_pointer#C

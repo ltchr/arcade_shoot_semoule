@@ -4,6 +4,7 @@
 
 #define MAX_NAME_LENGTH	32
 
+#define FPS 20
 
 
 // enum de l etat du jeu 

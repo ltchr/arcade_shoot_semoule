@@ -4,10 +4,12 @@
 CMakeFiles/main.dir/main.c.o
  ../lib/bullets.c
  ../lib/bullets.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/common.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib/BmpLib.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib/ESLib.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib/GfxLib.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib/def.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/lib/struct.h
- /home/isen/Bureau/ProjetC/arcade_shoot_semoule/main.c
+ ../lib/ship.c
+ ../lib/ship.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/common.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib/BmpLib.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib/ESLib.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib/GfxLib.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib/def.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/lib/struct.h
+ /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/main.c
