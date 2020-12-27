@@ -266,6 +266,7 @@ void lanceBoucleEvenements(void)
 	glutMotionFunc(sFonctionDeplacementSouris);
 	glutPassiveMotionFunc(sFonctionDeplacementPassifSouris);
 	glutReshapeFunc(sFonctionRedimensionnement);
+	glutIgnoreKeyRepeat(true);
 
 	/* Indique que la fonction ci-presente a ete appelee */
 	boucleEvenementsLancee = true;
@@ -474,7 +475,9 @@ static int *BVR2ARVB(int largeur, int hauteur, const unsigned char *donnees) {
 		ptrPixel[0] = ptrDonnees[0];
 		ptrPixel[1] = ptrDonnees[1];
 		ptrPixel[2] = ptrDonnees[2];
-		ptrPixel[3] = 0x0FF;
+		ptrPixel[3] = ptrDonnees[3];
+		//ptrPixel[3] = 0x0FF;
+		
 		ptrDonnees += 3; /* On passe a la premiere composante du pixel suivant */
 		ptrPixel += 4; /* On passe au pixel suivant */
 	}

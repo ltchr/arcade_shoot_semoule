@@ -8,8 +8,8 @@ Ship initShip(void){
 	tempShip.y = 0;
 	tempShip.xdir = 0;
 	tempShip.ydir = 0;
-	tempShip.width = 20;
-	tempShip.height = 30;
+	tempShip.width = 128;
+	tempShip.height = 128;
 	tempShip.life = 100;
 	tempShip.speed = 3;	
 
@@ -31,3 +31,5 @@ void showShip(int x, int y, DonneesImageRGB *image){
 	//couleurCourante(255, 160, 160);
 	//rectangle(x, y, x+w, y+h);
 }
+
+

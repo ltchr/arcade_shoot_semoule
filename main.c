@@ -11,9 +11,9 @@
 #include "common.h"
 #include "bullets.c"
 #include "ship.c"
+#include "score.c"
 
 void gestionEvenement(EvenementGfx evenement);
-void showScore();
 void clear(Level* levels); // clear the malloc of levels
 
 // Etats touches mouvement
@@ -45,11 +45,6 @@ void clear(Level* levels){
 	libereDonneesImageRGB(&virusSprite);
 }
 
-void showScore(/*int score*/){
-	//printf("score %d\n", score);
-}
-
-
 int main(int argc, char **argv)
 {
 	initialiseGfx(argc, argv);
@@ -64,8 +59,6 @@ int main(int argc, char **argv)
 // des qu'un evenement survient
 void gestionEvenement(EvenementGfx evenement)
 {
-
-
 	if (levels == NULL){
 		levels = (Level*)malloc(qtLevel*sizeof(Level));
 	}
@@ -92,12 +85,12 @@ void gestionEvenement(EvenementGfx evenement)
 					levels[i].virus[j].y = (int)hauteurFenetre()*0.7;
 					levels[i].virus[j].xdir = 0;
 					levels[i].virus[j].ydir = -1;
-					levels[i].virus[j].width = 20;
-					levels[i].virus[j].height = 20;
+					levels[i].virus[j].width = 128;
+					levels[i].virus[j].height = 128;
 					levels[i].virus[j].life = 100;
 				}
 			}
-			bullets = initBullets();
+			bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
 
 /*			PosXY pos;
 			pos.x = largeurFenetre()/2;
@@ -122,13 +115,13 @@ void gestionEvenement(EvenementGfx evenement)
 			
 		
 			if (!gameover && !levels[currentLevel].allDead){
-				moveBullet(bullets);
-				drawBullets(bullets);
+				checkCollisions(ship, bullets, bulletsSize, levels, currentLevel);
+				drawBullets(bullets, bulletsSize);
 				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
-					showShip(levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, virusSprite);
+					showShip(levels[currentLevel].virus[i].x - levels[currentLevel].virus[i].width/2, levels[currentLevel].virus[i].y - levels[currentLevel].virus[i].height/2, virusSprite);
 				}
 				moveShip(&ship);
-				showShip(ship.x, ship.y, spaceShipSprite);			
+				showShip(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
 				
 				showScore(score);
 			}else{
@@ -165,15 +158,15 @@ void gestionEvenement(EvenementGfx evenement)
 						
 					case ' ':
 						;
+						//resize(bullets, getSize()*sizeof(Bullet), sizeof(Bullet)*(getSize()+INITIAL_BULLET_DRAW_CAPACITY));
 						int i = 0;
-						for(; i < INITIAL_BULLET_DRAW_CAPACITY; i++) {
+						for(; i < getSize(); i++) {
 							if(bullets[i].del == true) {
 								break;
 							}
 						}
-						bullets[i] = newBullet(ship.x, ship.y, true);
-						
-						
+						bullets[i] = newBullet(ship.x, ship.y+ship.height/2, true);
+
 						break;
 				}
 			}

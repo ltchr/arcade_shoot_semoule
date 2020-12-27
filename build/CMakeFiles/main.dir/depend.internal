@@ -4,6 +4,8 @@
 CMakeFiles/main.dir/main.c.o
  ../lib/bullets.c
  ../lib/bullets.h
+ ../lib/score.c
+ ../lib/score.h
  ../lib/ship.c
  ../lib/ship.h
  /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/common.h

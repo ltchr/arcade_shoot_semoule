@@ -37,6 +37,11 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo <path>
 ## License
 Incomming
 
+## MEMO TODO
+Animations de sprite, thread pour séparer la logique du jeu et les animations en temps réel
+Probleme affichages des entités si le x, y et hors de la fenetre
+l'alpha des bitmaps est trop clair?
+gestion des ennemis à revoir, [actuellement] bloqué à cause du rezise des bullets (seg fault)
 
 
 ## Sources

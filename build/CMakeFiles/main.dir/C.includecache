@@ -12,6 +12,12 @@ bullets.h
 
 ../lib/bullets.h
 
+../lib/score.c
+score.h
+../lib/score.h
+
+../lib/score.h
+
 ../lib/ship.c
 ship.h
 ../lib/ship.h
@@ -63,4 +69,6 @@ bullets.c
 /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/bullets.c
 ship.c
 /home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/ship.c
+score.c
+/home/adri/Documents/project/shootSemoule/arcade_shoot_semoule/score.c
 
