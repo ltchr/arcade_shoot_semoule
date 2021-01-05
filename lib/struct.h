@@ -31,8 +31,9 @@ typedef struct BULLET_STRUCT
 	//int type;
 	int x;
 	int y;
-	int xdir;
-	int ydir;
+	int width;
+	int height;
+	int speed;
 	bool del;
 	bool ally;
 	int damage;

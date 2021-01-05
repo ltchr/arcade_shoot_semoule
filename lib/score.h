@@ -1,0 +1,1 @@
+void showScore(int score);
