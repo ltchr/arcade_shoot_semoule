@@ -115,12 +115,13 @@ void gestionEvenement(EvenementGfx evenement)
 			
 		
 			if (!gameover && !levels[currentLevel].allDead){
-				checkCollisions(ship, bullets, bulletsSize, levels, currentLevel);
-				drawBullets(bullets, bulletsSize);
+				checkCollisions(ship, bullets, getSize(), levels, currentLevel);
+				drawBullets(bullets, getSize());
 				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
 					showShip(levels[currentLevel].virus[i].x - levels[currentLevel].virus[i].width/2, levels[currentLevel].virus[i].y - levels[currentLevel].virus[i].height/2, virusSprite);
 				}
 				moveShip(&ship);
+				moveShipCollide(&ship);
 				showShip(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
 				
 				showScore(score);
@@ -135,8 +136,8 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Clavier:
-			printf("Etat: %d\n",etatCharacterClavier());
-			printf("Touche: %d\n",caractereClavier());
+			//printf("Etat: %d\n",etatCharacterClavier());
+			//printf("Touche: %d\n",caractereClavier());
 			
 			if(etatCharacterClavier()) {
 				switch(caractereClavier()) {
@@ -158,8 +159,7 @@ void gestionEvenement(EvenementGfx evenement)
 						
 					case ' ':
 						;
-						printf("size ##########   %d\n", getSize());
-						resize(bullets, getSize(), getSize()+10);
+						//resize(bullets, getSize(), getSize()+10);
 						//resize(bullets, getSize()*sizeof(Bullet), getSize()*sizeof(Bullet)+10);
 						int i = 0;
 						for(; i < getSize(); i++) {
