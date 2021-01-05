@@ -158,7 +158,9 @@ void gestionEvenement(EvenementGfx evenement)
 						
 					case ' ':
 						;
-						//resize(bullets, getSize()*sizeof(Bullet), sizeof(Bullet)*(getSize()+INITIAL_BULLET_DRAW_CAPACITY));
+						printf("size ##########   %d\n", getSize());
+						resize(bullets, getSize(), getSize()+10);
+						//resize(bullets, getSize()*sizeof(Bullet), getSize()*sizeof(Bullet)+10);
 						int i = 0;
 						for(; i < getSize(); i++) {
 							if(bullets[i].del == true) {

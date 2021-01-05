@@ -1,4 +1,4 @@
-#define INITIAL_BULLET_DRAW_CAPACITY 128
+#define INITIAL_BULLET_DRAW_CAPACITY 12
 
 void cercle(float centreX, float centreY, float rayon);
 

@@ -23,7 +23,7 @@ Bullet *initBullets(int from, int to){
 	tempbul.del = true;
 	tempbul.ally = true;
 	tempbul.damage = 0;
-	
+
 	bulletsSize = INITIAL_BULLET_DRAW_CAPACITY;
 
 	Bullet *bullets;
@@ -36,23 +36,25 @@ Bullet *initBullets(int from, int to){
 
 
 Bullet *resize(Bullet *array, int oldSize, int newSize){
-	// *bullets = realloc(*bullets, sizeof(Bullet));
-	Bullet *newArray;
+	//Bullet *newArray;
 	
-	printf("bulletsSize  before: %d\n", bulletsSize);
+	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
 	bulletsSize = newSize > oldSize ? oldSize : newSize;
-	printf("bulletsSize  after: %d\n", bulletsSize);
+	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
 	
-	newArray = realloc(array, bulletsSize);
+	//newArray = realloc(array, bulletsSize);
+	array = realloc(array, bulletsSize * sizeof(Bullet));
+	array = initBullets(oldSize, newSize*sizeof(Bullet));
 
-//	newArray = malloc(newSize);
-	//memset(newArray, 0, newSize);
-	//memcpy(newArray, array, bulletsSize);
+	// newArray = malloc(newSize);
+	// memset(newArray, 0, newSize);
+	// memcpy(newArray, array, bulletsSize);
 
-	//newArray = initBullets(oldSize, newSize);
-	free(array);
+	// newArray = initBullets(oldSize, newSize);
+	// free(array);
 	
-	return newArray;
+	// return newArray;
+	return array;
 }
 
 
@@ -114,12 +116,12 @@ void checkCollisions(Ship ship, Bullet *bullets, int bSize, Level *levels, int c
 		if (bullets[j].ally){
 			for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
 				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height)){
-					printf("destroyBullets + reduire hp ou meurt\n");
+					printf("hits\n");
+					//return levels[currentLevel].virus[i];
 				}
 			}
 		}
 	}
-
 
 }
 
