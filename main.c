@@ -12,6 +12,7 @@
 #include "bullets.c"
 #include "ship.c"
 #include "score.c"
+#include "virus.c"
 
 void gestionEvenement(EvenementGfx evenement);
 void clear(Level* levels); // clear the malloc of levels
@@ -32,6 +33,8 @@ static Ship ship;
 static int qtLevel = 2;
 static int currentLevel = 1;
 static Level *levels = NULL;
+
+static Ship *virus;
 
 static Bullet *bullets;
 
@@ -74,31 +77,12 @@ void gestionEvenement(EvenementGfx evenement)
 			virusSprite = lisBMPRGB("../img/virus.bmp");
 
 			ship = initShip();
-
-			// Init levels
-			for (int i = 0; i < qtLevel; ++i){
-				levels[i].qtVirusPerLvl = (i + 1)*3;
-				levels[i].hasBoss = false;
-				levels[i].allDead = false;
-				for (int j = 0; j < levels[i].qtVirusPerLvl; ++j){
-					levels[i].virus[j].x = j*150;
-					levels[i].virus[j].y = (int)hauteurFenetre()*0.7;
-					levels[i].virus[j].xdir = 0;
-					levels[i].virus[j].ydir = -1;
-					levels[i].virus[j].width = 128;
-					levels[i].virus[j].height = 128;
-					levels[i].virus[j].life = 100;
-				}
-			}
+			// Init virus
+			virus = initVirus(1);
+			
+			
 			bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
 
-/*			PosXY pos;
-			pos.x = largeurFenetre()/2;
-			pos.y = hauteurFenetre()/2;
-				
-			Joueur* joueur = new_joueur(pos, 10.0f, 10.0f);
-			joueur->move((Entite*)joueur, pos, 5.0f, 5.0f);
-*/
 			demandeTemporisation(FPS);
 			break;
 		
@@ -114,11 +98,11 @@ void gestionEvenement(EvenementGfx evenement)
 			ship.xdir += (tD+tQ);
 			
 		
-			if (!gameover && !levels[currentLevel].allDead){
-				checkCollisions(ship, bullets, getSize(), levels, currentLevel);
+			if (!gameover && checkEnemyLeft(virus)){
+				checkCollisions(ship, bullets, getSize(), virus);
 				drawBullets(bullets, getSize());
-				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
-					showShip(levels[currentLevel].virus[i].x - levels[currentLevel].virus[i].width/2, levels[currentLevel].virus[i].y - levels[currentLevel].virus[i].height/2, virusSprite);
+				for (int i = 0; i < enemyNumbers(1); ++i){
+					showShip(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
 				}
 				moveShip(&ship);
 				moveShipCollide(&ship);

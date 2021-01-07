@@ -118,11 +118,11 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 
 }
 
-void checkCollisions(Ship ship, Bullet *bullets, int bSize, Level *levels, int currentLevel){
+void checkCollisions(Ship ship, Bullet *bullets, int bSize, Ship *virus){
 	for (int j = 0; j < bSize; ++j){
 		if (bullets[j].ally){
-			for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
-				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height)){
+			for (int i = 0; i < enemyNumbers(1); ++i){
+				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
 					//printf("hits\n");
 					//return levels[currentLevel].virus[i];
 				}
