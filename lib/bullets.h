@@ -12,3 +12,4 @@ Bullet newBullet(int x, int y, bool isAlly);
 void drawBullets(Bullet *bullets, int size);
 static void showBullet(int x, int y); // show bullet at a x y
 void destroyBullets(void);
+int getSize();

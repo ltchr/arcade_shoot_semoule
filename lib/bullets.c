@@ -31,6 +31,7 @@ Bullet *initBullets(int from, int to){
 	for(int i = from; i < to; i++) {
 		bullets[i] = tempbul;
 	}
+
 	return bullets;
 }
 
@@ -39,13 +40,19 @@ Bullet *resize(Bullet *array, int oldSize, int newSize){
 	//Bullet *newArray;
 	
 	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
-	bulletsSize = newSize > oldSize ? oldSize : newSize;
-	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
+
+	if (newSize > getSize()){
+		oldSize = bulletsSize;
+		bulletsSize = newSize;
+		printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
+		array = realloc(array, bulletsSize * sizeof(Bullet));
+		//array = initBullets(oldSize, newSize);
+	}
+
+	//bulletsSize = newSize > oldSize ? newSize : oldSize;
+
 	
 	//newArray = realloc(array, bulletsSize);
-	array = realloc(array, bulletsSize * sizeof(Bullet));
-	array = initBullets(oldSize, newSize*sizeof(Bullet));
-
 	// newArray = malloc(newSize);
 	// memset(newArray, 0, newSize);
 	// memcpy(newArray, array, bulletsSize);
@@ -116,7 +123,7 @@ void checkCollisions(Ship ship, Bullet *bullets, int bSize, Level *levels, int c
 		if (bullets[j].ally){
 			for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
 				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height)){
-					printf("hits\n");
+					//printf("hits\n");
 					//return levels[currentLevel].virus[i];
 				}
 			}
@@ -124,6 +131,10 @@ void checkCollisions(Ship ship, Bullet *bullets, int bSize, Level *levels, int c
 	}
 
 }
+
+
+// nombre de bullets à false
+// copie de tableau sur un nouveau tableau sans les false
 
 void drawBullets(Bullet *bullets, int size){
 	for (int i = 0; i < size; i++){

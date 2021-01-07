@@ -11,9 +11,24 @@ Ship initShip(void){
 	tempShip.width = 128;
 	tempShip.height = 128;
 	tempShip.life = 100;
-	tempShip.speed = 3;	
+	tempShip.speed = 30;	
 
 	return tempShip;
+}
+
+void moveShipCollide(Ship *ship){
+	if(ship->x+ship->width/2 > largeurFenetre() ){
+		ship->x = largeurFenetre()-ship->width/2;
+	} 
+	if(ship->y+ship->height/2 > hauteurFenetre() ){
+		ship->y = hauteurFenetre()-ship->height/2;
+	} 
+	if(ship->x-ship->width/2 < 0 ){
+		ship->x = ship->width/2;
+	} 
+	if(ship->y-ship->height/2 < 0 ){
+		ship->y = ship->height/2;
+	} 
 }
 
 void moveShip(Ship *ship){
@@ -25,9 +40,10 @@ void moveShip(Ship *ship){
 }
 
 void showShip(int x, int y, DonneesImageRGB *image){
-	if (image != NULL) {
-		ecrisImage(x, y, image->largeurImage, image->hauteurImage, image->donneesRGB);
-	}
+		if (image != NULL) {
+			ecrisImage(x, y, image->largeurImage, image->hauteurImage, image->donneesRGB);
+		}
+
 	//couleurCourante(255, 160, 160);
 	//rectangle(x, y, x+w, y+h);
 }

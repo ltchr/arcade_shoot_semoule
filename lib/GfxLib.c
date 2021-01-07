@@ -475,7 +475,6 @@ static int *BVR2ARVB(int largeur, int hauteur, const unsigned char *donnees) {
 		ptrPixel[0] = ptrDonnees[0];
 		ptrPixel[1] = ptrDonnees[1];
 		ptrPixel[2] = ptrDonnees[2];
-		//ptrPixel[3] = 0x0FF;
 		if(ptrDonnees[0] == 0x0FF && ptrDonnees[1] == 0x00 && ptrDonnees[2] == 0x0FF) {
             ptrPixel[3] = 0x000;
         }
@@ -710,6 +709,9 @@ static void fonctionClavier(GLubyte caractere, int xSouris, int ySouris)
 #ifdef ACTION_CLAVIER_MEMORISE_POSITION_SOURIS
 	sAbscisseSouris = xSouris;
 	sOrdonneeSouris = sHauteurFenetre-ySouris;
+#else
+	(void)xSouris;
+	(void)ySouris;
 #endif
 
 //	On memorise l'etat des modificateurs Shift, Ctrl et Alt
@@ -729,6 +731,9 @@ static void fonctionClavierUp(GLubyte caractere, int xSouris, int ySouris)
 #ifdef ACTION_CLAVIER_MEMORISE_POSITION_SOURIS
 	sAbscisseSouris = xSouris;
 	sOrdonneeSouris = sHauteurFenetre-ySouris;
+#else
+	(void)xSouris;
+	(void)ySouris;
 #endif
 
 //	On memorise l'etat des modificateurs Shift, Ctrl et Alt
@@ -817,6 +822,9 @@ static void fonctionClavierSpecial(int codeTouche, int xSouris, int ySouris)
 #ifdef ACTION_CLAVIER_MEMORISE_POSITION_SOURIS
 	sAbscisseSouris = xSouris;
 	sOrdonneeSouris = sHauteurFenetre-ySouris;
+#else
+	(void)xSouris;
+	(void)ySouris;
 #endif
 
 //	On memorise l'etat des modificateurs Shift, Ctrl et Alt
