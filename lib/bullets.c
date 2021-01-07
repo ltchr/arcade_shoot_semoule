@@ -13,25 +13,17 @@ void cercle(float centreX, float centreY, float rayon){
 	}		
 }
 
-
 Bullet *initBullets(int from, int to){
 	Bullet *bullets;
 	bullets = (Bullet*)malloc(to*sizeof(Bullet));
 	for(int i = from; i < to; i++) {
 		bullets[i] = createBullet();
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	return bullets;
 }
 
 Bullet createBullet(){
-<<<<<<< HEAD
-	
-=======
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	Bullet tempbul;
 
 	tempbul.x = 0;
@@ -40,16 +32,6 @@ Bullet createBullet(){
 	tempbul.height = 10;
 	tempbul.del = true;
 	tempbul.ally = true;
-<<<<<<< HEAD
-	tempbul.damage = 25;	
-
-	return tempbul;
-}
-
-Bullet newBullet(int x, int y, bool isAlly){
-	Bullet b;
-
-=======
 	tempbul.damage = 25;
 
 	return tempbul;
@@ -59,7 +41,6 @@ Bullet newBullet(int x, int y, bool isAlly){
 Bullet newBullet(int x, int y, bool isAlly){
 	Bullet b;
 
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	b.x = x;
 	b.y = y;
 	b.width = 10;
@@ -73,56 +54,32 @@ Bullet newBullet(int x, int y, bool isAlly){
 }
 
 
-<<<<<<< HEAD
-
-/*
-Bullet *resize(Bullet *array, int newSize){
-//	Bullet *newArray;
-
-=======
 /*
 Bullet *resize(Bullet *array, int oldSize, int newSize){
 	//Bullet *newArray;
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	
-	printf("bulletsSize : %d ; %d ; %d \n", bulletsSize, newSize, getSize());
-
+	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
 	if (newSize > getSize()){
-		int oldSize = bulletsSize;
+		oldSize = bulletsSize;
 		bulletsSize = newSize;
-		printf("bulletsSize : %d ; %d ; %d \n", bulletsSize, newSize, getSize());
-		
-		//array = realloc(array, bulletsSize * sizeof(Bullet));
-	
-		array = initBullets(oldSize, newSize);
-
+		printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
+		array = realloc(array, bulletsSize * sizeof(Bullet));
+		//array = initBullets(oldSize, newSize);
 	}
+	//bulletsSize = newSize > oldSize ? newSize : oldSize;
+	
+	//newArray = realloc(array, bulletsSize);
+	// newArray = malloc(newSize);
+	// memset(newArray, 0, newSize);
+	// memcpy(newArray, array, bulletsSize);
+	// newArray = initBullets(oldSize, newSize);
+	// free(array);
+	
 	// return newArray;
 	return array;
 }*/
 
 
-<<<<<<< HEAD
-
-// nombre de bullets à false
-// copie de tableau sur un nouveau tableau sans les false
-Bullet *copyTab(Bullet *bullets){
-	Bullet *newArray = (Bullet*)malloc((getSize()+1)*sizeof(Bullet));
-
-	//memcpy(newArray, bullets, getSize());
-	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
-		newArray[cptBullets] = bullets[cptBullets];
-	}
-	newArray[getSize()] = createBullet();
-	bulletsSize++;
-	return newArray;
-}
-
-Bullet *removeBullet(Bullet *bullets){
-	Bullet *newArray = (Bullet*)malloc((getSize())*sizeof(Bullet));
-	int newCptBullets=0;
-
-=======
 Bullet *copyTab(Bullet *bullets, int x, int y, bool isAlly){
 	Bullet *newArray = (Bullet*)malloc((getSize()+1)*sizeof(Bullet));
 
@@ -139,22 +96,16 @@ Bullet *removeBullet(Bullet *bullets){
 	Bullet *newArray = (Bullet*)malloc((getSize())*sizeof(Bullet));
 	int newCptBullets=0;
 
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	printf("getSize %d\n", getSize());
 	//memcpy(newArray, bullets, getSize());
 	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
 		if(!bullets[cptBullets].del){
-<<<<<<< HEAD
-			newArray[cptBullets] = bullets[cptBullets];
-=======
 			newArray[newCptBullets] = bullets[cptBullets];
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 			newCptBullets++;
 		}
 	}
 	return newArray;
 }
-
 
 bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, int height2){
 	int coinX1 = x-width/2;
@@ -189,14 +140,10 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 	return false;
 }
 
-<<<<<<< HEAD
-void checkCollisions(Ship ship, Bullet *bullets, Level *levels, int currentLevel){
-=======
 Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
 	Bullet *newBullets = NULL;
 	newBullets = bullets;
 
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	for (int j = 0; j < getSize(); ++j){
 		if (bullets[j].ally){
 			for (int i = 0; i < getVirusQt(); ++i){
@@ -211,16 +158,9 @@ Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
 	return newBullets;
 }
 
-<<<<<<< HEAD
-
-void drawBullets(Bullet *bullets){
-	for (int i = 0; i < getSize(); i++){
-		if(bullets[i].del == false) {
-=======
 void drawBullets(Bullet *bullets, DonneesImageRGB *image){
 	for (int i = 0; i < getSize(); i++){
 		if(!bullets[i].del) {
->>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
 			}else {
