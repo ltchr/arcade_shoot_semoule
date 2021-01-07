@@ -1,6 +1,6 @@
 #include "bullets.h"
 
-static int bulletsSize;
+static int bulletsSize = INITIAL_BULLET_DRAW_CAPACITY;
 
 void cercle(float centreX, float centreY, float rayon){
 	const int Pas = 20; // Nombre de secteurs pour tracer le cercle
@@ -13,7 +13,17 @@ void cercle(float centreX, float centreY, float rayon){
 	}		
 }
 
+
 Bullet *initBullets(int from, int to){
+	Bullet *bullets;
+	bullets = (Bullet*)malloc(to*sizeof(Bullet));
+	for(int i = from; i < to; i++) {
+		bullets[i] = createBullet();
+	}
+	return bullets;
+}
+
+Bullet createBullet(){
 	
 	Bullet tempbul;
 	tempbul.x = 0;
@@ -22,54 +32,13 @@ Bullet *initBullets(int from, int to){
 	tempbul.height = 10;
 	tempbul.del = true;
 	tempbul.ally = true;
-	tempbul.damage = 0;
+	tempbul.damage = 25;	
 
-	bulletsSize = INITIAL_BULLET_DRAW_CAPACITY;
-
-	Bullet *bullets;
-	bullets = (Bullet*)malloc(to*sizeof(Bullet));
-	for(int i = from; i < to; i++) {
-		bullets[i] = tempbul;
-	}
-
-	return bullets;
+	return tempbul;
 }
-
-
-Bullet *resize(Bullet *array, int oldSize, int newSize){
-	//Bullet *newArray;
-	
-	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
-
-	if (newSize > getSize()){
-		oldSize = bulletsSize;
-		bulletsSize = newSize;
-		printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
-		array = realloc(array, bulletsSize * sizeof(Bullet));
-		//array = initBullets(oldSize, newSize);
-	}
-
-	//bulletsSize = newSize > oldSize ? newSize : oldSize;
-
-	
-	//newArray = realloc(array, bulletsSize);
-	// newArray = malloc(newSize);
-	// memset(newArray, 0, newSize);
-	// memcpy(newArray, array, bulletsSize);
-
-	// newArray = initBullets(oldSize, newSize);
-	// free(array);
-	
-	// return newArray;
-	return array;
-}
-
 
 Bullet newBullet(int x, int y, bool isAlly){
 	Bullet b;
-
-	//b = malloc(sizeof(Bullet));
-	//memset(b, 0, sizeof(Bullet));
 
 	b.x = x;
 	b.y = y;
@@ -82,6 +51,61 @@ Bullet newBullet(int x, int y, bool isAlly){
 
 	return b;
 }
+
+
+
+/*
+Bullet *resize(Bullet *array, int newSize){
+//	Bullet *newArray;
+
+	
+	printf("bulletsSize : %d ; %d ; %d \n", bulletsSize, newSize, getSize());
+
+	if (newSize > getSize()){
+		int oldSize = bulletsSize;
+		bulletsSize = newSize;
+		printf("bulletsSize : %d ; %d ; %d \n", bulletsSize, newSize, getSize());
+		
+		//array = realloc(array, bulletsSize * sizeof(Bullet));
+	
+		array = initBullets(oldSize, newSize);
+
+	}
+	// return newArray;
+	return array;
+}*/
+
+
+
+// nombre de bullets à false
+// copie de tableau sur un nouveau tableau sans les false
+Bullet *copyTab(Bullet *bullets){
+	Bullet *newArray = (Bullet*)malloc((getSize()+1)*sizeof(Bullet));
+
+	//memcpy(newArray, bullets, getSize());
+	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
+		newArray[cptBullets] = bullets[cptBullets];
+	}
+	newArray[getSize()] = createBullet();
+	bulletsSize++;
+	return newArray;
+}
+
+Bullet *removeBullet(Bullet *bullets){
+	Bullet *newArray = (Bullet*)malloc((getSize())*sizeof(Bullet));
+	int newCptBullets=0;
+
+	printf("getSize %d\n", getSize());
+	//memcpy(newArray, bullets, getSize());
+	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
+		if(!bullets[cptBullets].del){
+			newArray[cptBullets] = bullets[cptBullets];
+			newCptBullets++;
+		}
+	}
+	return newArray;
+}
+
 
 bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, int height2){
 	int coinX1 = x-width/2;
@@ -118,8 +142,8 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 
 }
 
-void checkCollisions(Ship ship, Bullet *bullets, int bSize, Level *levels, int currentLevel){
-	for (int j = 0; j < bSize; ++j){
+void checkCollisions(Ship ship, Bullet *bullets, Level *levels, int currentLevel){
+	for (int j = 0; j < getSize(); ++j){
 		if (bullets[j].ally){
 			for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
 				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height)){
@@ -133,11 +157,8 @@ void checkCollisions(Ship ship, Bullet *bullets, int bSize, Level *levels, int c
 }
 
 
-// nombre de bullets à false
-// copie de tableau sur un nouveau tableau sans les false
-
-void drawBullets(Bullet *bullets, int size){
-	for (int i = 0; i < size; i++){
+void drawBullets(Bullet *bullets){
+	for (int i = 0; i < getSize(); i++){
 		if(bullets[i].del == false) {
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
