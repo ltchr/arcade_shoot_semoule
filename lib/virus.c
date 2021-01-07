@@ -3,7 +3,7 @@
 static int qtEnemy = 0;
 
 bool checkEnemyLeft(Ship *virus) {
-	static int livingEnemy = 0;
+	int livingEnemy = 0;
 	for(int j = 0; j < qtEnemy; ++j) {
 		if (virus[j].life > 0) {
 			livingEnemy++;
@@ -11,8 +11,7 @@ bool checkEnemyLeft(Ship *virus) {
 	}
 	if(livingEnemy > 0) {
 		return true;
-	}
-	else {
+	}else {
 		return false;
 	}
 }

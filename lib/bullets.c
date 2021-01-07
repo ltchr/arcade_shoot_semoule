@@ -41,9 +41,6 @@ Bullet createBullet(){
 Bullet newBullet(int x, int y, bool isAlly){
 	Bullet b;
 
-	//b = malloc(sizeof(Bullet));
-	//memset(b, 0, sizeof(Bullet));
-
 	b.x = x;
 	b.y = y;
 	b.width = 10;
@@ -87,16 +84,14 @@ Bullet *resize(Bullet *array, int oldSize, int newSize){
 }*/
 
 
-// nombre de bullets à false
-// copie de tableau sur un nouveau tableau sans les false
-Bullet *copyTab(Bullet *bullets){
+Bullet *copyTab(Bullet *bullets, int x, int y, bool isAlly){
 	Bullet *newArray = (Bullet*)malloc((getSize()+1)*sizeof(Bullet));
 
 	//memcpy(newArray, bullets, getSize());
 	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
 		newArray[cptBullets] = bullets[cptBullets];
 	}
-	newArray[getSize()] = createBullet();
+	newArray[getSize()] = newBullet(x, y, isAlly);
 	bulletsSize++;
 	return newArray;
 }
@@ -109,13 +104,12 @@ Bullet *removeBullet(Bullet *bullets){
 	//memcpy(newArray, bullets, getSize());
 	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
 		if(!bullets[cptBullets].del){
-			newArray[cptBullets] = bullets[cptBullets];
+			newArray[newCptBullets] = bullets[cptBullets];
 			newCptBullets++;
 		}
 	}
 	return newArray;
 }
-
 
 bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, int height2){
 	int coinX1 = x-width/2;
@@ -152,18 +146,22 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 
 }
 
-void checkCollisions(Ship ship, Bullet *bullets, int bSize, Ship *virus){
-	for (int j = 0; j < bSize; ++j){
+Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
+	Bullet *newBullets = NULL;
+	newBullets = bullets;
+
+	for (int j = 0; j < getSize(); ++j){
 		if (bullets[j].ally){
 			for (int i = 0; i < enemyNumbers(1); ++i){
-				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
-					//printf("hits\n");
-					//return levels[currentLevel].virus[i];
+				if(!bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
+					virus[i].life -= bullets[j].damage;
+					bullets[j].del = true;
+					newBullets = removeBullet(bullets);
 				}
 			}
 		}
 	}
-
+	return newBullets;
 }
 
 
@@ -172,7 +170,7 @@ void checkCollisions(Ship ship, Bullet *bullets, int bSize, Ship *virus){
 
 void drawBullets(Bullet *bullets, int size){
 	for (int i = 0; i < size; i++){
-		if(bullets[i].del == false) {
+		if(!bullets[i].del) {
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
 			}
