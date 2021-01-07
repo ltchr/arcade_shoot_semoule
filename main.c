@@ -143,11 +143,12 @@ void gestionEvenement(EvenementGfx evenement)
 						
 					case ' ':
 						;
-						//resize(bullets, getSize(), getSize()+10);
-						//resize(bullets, getSize()*sizeof(Bullet), getSize()*sizeof(Bullet)+10);
+						bullets = copyTab(bullets);
+
 						int i = 0;
 						for(; i < getSize(); i++) {
 							if(bullets[i].del == true) {
+								bullets = removeBullet(bullets);
 								break;
 							}
 						}

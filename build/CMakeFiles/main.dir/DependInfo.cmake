@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/isen/Bureau/ProjetC/arcade_shoot_semoule/main.c" "/home/isen/Bureau/ProjetC/arcade_shoot_semoule/build/CMakeFiles/main.dir/main.c.o"
+  "/home/adri/Documents/ISEN/alg/C/shootSemoule/arcade_shoot_semoule/main.c" "/home/adri/Documents/ISEN/alg/C/shootSemoule/arcade_shoot_semoule/build/CMakeFiles/main.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -16,7 +16,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/isen/Bureau/ProjetC/arcade_shoot_semoule/build/lib/CMakeFiles/lib.dir/DependInfo.cmake"
+  "/home/adri/Documents/ISEN/alg/C/shootSemoule/arcade_shoot_semoule/build/lib/CMakeFiles/lib.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

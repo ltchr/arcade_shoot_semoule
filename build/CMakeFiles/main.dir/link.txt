@@ -1,1 +1,1 @@
-/usr/bin/cc -g  -rdynamic CMakeFiles/main.dir/main.c.o  -o main  lib/liblib.a -lGL -lGLU -lglut -lX11 -lm 
+/usr/bin/cc -g  -rdynamic CMakeFiles/main.dir/main.c.o  -o main  lib/liblib.a -lGL -lGLU -lglut -lXi -lX11 -lm 
