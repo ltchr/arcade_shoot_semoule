@@ -12,6 +12,8 @@ Ship initShip(void){
 	tempShip.height = 128;
 	tempShip.life = 100;
 	tempShip.speed = 8;	
+	tempShip.score = 0;	
+	tempShip.reloadTime = 0;	
 
 	return tempShip;
 }

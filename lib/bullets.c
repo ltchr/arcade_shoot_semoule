@@ -48,7 +48,7 @@ Bullet newBullet(int x, int y, bool isAlly){
 	b.speed = 10;
 	b.del = false;
 	b.ally = isAlly;
-	b.damage = 25;
+	b.damage = 500;
 
 	return b;
 }
@@ -140,15 +140,19 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 	return false;
 }
 
-Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
+Bullet *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score){
 	Bullet *newBullets = NULL;
 	newBullets = bullets;
 
+	// Bullets
 	for (int j = 0; j < getSize(); ++j){
 		if (bullets[j].ally){
 			for (int i = 0; i < getVirusQt(); ++i){
 				if(virus[i].life > 0 && !bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
 					virus[i].life -= bullets[j].damage;
+					if (virus[i].life<=0){
+						*score+=1;
+					}
 					bullets[j].del = true;
 					newBullets = removeBullet(bullets);
 				}
@@ -171,11 +175,7 @@ void drawBullets(Bullet *bullets, DonneesImageRGB *image){
 	}
 }
 
-static void showBullet(int x, int y){
-	couleurCourante(150, 0, 50);
-	cercle(x, y, 5);
-}
-
 int getSize(){
 	return bulletsSize;
 }
+

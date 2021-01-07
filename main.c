@@ -40,6 +40,8 @@ static Bullet *bullets;
 static bool isMenu = true;
 static int choixMenu;
 
+static unsigned int timer = 0;
+
 static DonneesImageRGB *spaceShipSprite = NULL;
 static DonneesImageRGB *virusSprite = NULL;
 static DonneesImageRGB *virusBullet = NULL;
@@ -86,6 +88,8 @@ void gestionEvenement(EvenementGfx evenement)
 			
 			bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
 
+			timer = (int)tempsReel();
+
 			demandeTemporisation(FPS);
 			break;
 		
@@ -110,19 +114,35 @@ void gestionEvenement(EvenementGfx evenement)
 				case 1:
 					showImage(0, 0, background);
 					if (!gameover && !isMenu){
-
 						if(!checkEnemyLeft(virus)){
+			                timer = (int)tempsReel();
 						 	currentLevel++;
 			                virus = initVirus(currentLevel);
+			                while (tempsReel()-timer<2){
+			                	//draw score of the lvl
+			                }
+		                	ship.x = largeurFenetre()/2;
+		                	ship.y = 0;
+
 						}
-						checkCollisions(ship, bullets, virus);
+						checkCollisionsBullet(ship, bullets, virus, &score);
+
 						drawBullets(bullets, shipBullet);
+						
 						for (int i = 0; i < getVirusQt(); ++i){
 							if (virus[i].life>0){
 								showImage(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
-								//moveShip(&virus[i]);
+								moveVirus(&virus[i]);
+								if (virus[i].reloadTime > valeurAleatoire()*10){
+									bullets = copyTab(bullets, virus[i].x, virus[i].y-virus[i].height/2, false);
+									timer = tempsReel();
+									virus[i].reloadTime = 0;									
+								}else{
+									virus[i].reloadTime = (int)tempsReel()-timer;
+								}
 							}
 						}
+
 						moveShip(&ship);
 						moveShipCollide(&ship);
 						showImage(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
@@ -200,12 +220,7 @@ void gestionEvenement(EvenementGfx evenement)
 			}
 			
 			/*
-
-			if(caractereClavier() == ' '){
-
-			//	newBullet(&bullets, ship);
-			}
-			
+	
 			switch (caractereClavier())
 			{
 				
@@ -264,7 +279,7 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case ClavierSpecial:
-			printf("ASCII %d\n", toucheClavier());
+			//printf("ASCII %d\n", toucheClavier());
 			if(toucheClavier() == ToucheFlecheHaut){
 				ship.ydir += 1;
 			}
@@ -298,7 +313,6 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 		
 		case Redimensionnement: // La taille de la fenetre a ete modifie ou on est passe en plein ecran
-			// Donc le systeme nous en informe
 			printf("Largeur : %d\t", largeurFenetre());
 			printf("Hauteur : %d\n", hauteurFenetre());
 			break;

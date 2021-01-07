@@ -10,6 +10,8 @@ typedef struct SHIP_STRUCT
 	int height;
 	int life;
 	int speed;
+	int score;
+	float reloadTime;
 } Ship;
 
 typedef struct LEVEL_STRUCT

@@ -1,6 +1,6 @@
 // Largeur et hauteur par defaut d'une image correspondant a nos criteres
-#define LargeurFenetre 800
-#define HauteurFenetre 600
+#define LargeurFenetre 1280
+#define HauteurFenetre 720
 
 #define MAX_NAME_LENGTH	32
 
