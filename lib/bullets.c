@@ -20,18 +20,27 @@ Bullet *initBullets(int from, int to){
 	for(int i = from; i < to; i++) {
 		bullets[i] = createBullet();
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	return bullets;
 }
 
 Bullet createBullet(){
+<<<<<<< HEAD
 	
+=======
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	Bullet tempbul;
+
 	tempbul.x = 0;
 	tempbul.y = 0;
 	tempbul.width = 10;
 	tempbul.height = 10;
 	tempbul.del = true;
 	tempbul.ally = true;
+<<<<<<< HEAD
 	tempbul.damage = 25;	
 
 	return tempbul;
@@ -40,6 +49,17 @@ Bullet createBullet(){
 Bullet newBullet(int x, int y, bool isAlly){
 	Bullet b;
 
+=======
+	tempbul.damage = 25;
+
+	return tempbul;
+
+}
+
+Bullet newBullet(int x, int y, bool isAlly){
+	Bullet b;
+
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	b.x = x;
 	b.y = y;
 	b.width = 10;
@@ -53,11 +73,17 @@ Bullet newBullet(int x, int y, bool isAlly){
 }
 
 
+<<<<<<< HEAD
 
 /*
 Bullet *resize(Bullet *array, int newSize){
 //	Bullet *newArray;
 
+=======
+/*
+Bullet *resize(Bullet *array, int oldSize, int newSize){
+	//Bullet *newArray;
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	
 	printf("bulletsSize : %d ; %d ; %d \n", bulletsSize, newSize, getSize());
 
@@ -76,6 +102,7 @@ Bullet *resize(Bullet *array, int newSize){
 }*/
 
 
+<<<<<<< HEAD
 
 // nombre de bullets à false
 // copie de tableau sur un nouveau tableau sans les false
@@ -95,11 +122,33 @@ Bullet *removeBullet(Bullet *bullets){
 	Bullet *newArray = (Bullet*)malloc((getSize())*sizeof(Bullet));
 	int newCptBullets=0;
 
+=======
+Bullet *copyTab(Bullet *bullets, int x, int y, bool isAlly){
+	Bullet *newArray = (Bullet*)malloc((getSize()+1)*sizeof(Bullet));
+
+	//memcpy(newArray, bullets, getSize());
+	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
+		newArray[cptBullets] = bullets[cptBullets];
+	}
+	newArray[getSize()] = newBullet(x, y, isAlly);
+	bulletsSize++;
+	return newArray;
+}
+
+Bullet *removeBullet(Bullet *bullets){
+	Bullet *newArray = (Bullet*)malloc((getSize())*sizeof(Bullet));
+	int newCptBullets=0;
+
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	printf("getSize %d\n", getSize());
 	//memcpy(newArray, bullets, getSize());
 	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
 		if(!bullets[cptBullets].del){
+<<<<<<< HEAD
 			newArray[cptBullets] = bullets[cptBullets];
+=======
+			newArray[newCptBullets] = bullets[cptBullets];
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 			newCptBullets++;
 		}
 	}
@@ -138,35 +187,46 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 		return true;
 
 	return false;
-
-
 }
 
+<<<<<<< HEAD
 void checkCollisions(Ship ship, Bullet *bullets, Level *levels, int currentLevel){
+=======
+Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
+	Bullet *newBullets = NULL;
+	newBullets = bullets;
+
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 	for (int j = 0; j < getSize(); ++j){
 		if (bullets[j].ally){
-			for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
-				if(isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, levels[currentLevel].virus[i].x, levels[currentLevel].virus[i].y, levels[currentLevel].virus[i].width, levels[currentLevel].virus[i].height)){
-					//printf("hits\n");
-					//return levels[currentLevel].virus[i];
+			for (int i = 0; i < getVirusQt(); ++i){
+				if(virus[i].life > 0 && !bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
+					virus[i].life -= bullets[j].damage;
+					bullets[j].del = true;
+					newBullets = removeBullet(bullets);
 				}
 			}
 		}
 	}
-
+	return newBullets;
 }
 
+<<<<<<< HEAD
 
 void drawBullets(Bullet *bullets){
 	for (int i = 0; i < getSize(); i++){
 		if(bullets[i].del == false) {
+=======
+void drawBullets(Bullet *bullets, DonneesImageRGB *image){
+	for (int i = 0; i < getSize(); i++){
+		if(!bullets[i].del) {
+>>>>>>> 0feb1437f63ed6d0197e38453db8510f2253ed0d
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
-			}
-			else {
+			}else {
 				bullets[i].y -= bullets[i].speed;
 			}
-			showBullet(bullets[i].x, bullets[i].y);
+			showImage(bullets[i].x, bullets[i].y, image);
 		}
 	}
 }
@@ -176,15 +236,6 @@ static void showBullet(int x, int y){
 	cercle(x, y, 5);
 }
 
-
-
 int getSize(){
 	return bulletsSize;
 }
-
-/*
-void destroyBullets(void){
-	free(bullets);
-	bullets = NULL;
-}
-*/

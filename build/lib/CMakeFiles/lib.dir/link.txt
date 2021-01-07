@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblib.a  CMakeFiles/lib.dir/BmpLib.c.o CMakeFiles/lib.dir/ErreurLib.c.o CMakeFiles/lib.dir/ESLib.c.o CMakeFiles/lib.dir/GfxLib.c.o CMakeFiles/lib.dir/OutilsLib.c.o CMakeFiles/lib.dir/SocketLib.c.o CMakeFiles/lib.dir/ThreadLib.c.o CMakeFiles/lib.dir/TortueLib.c.o CMakeFiles/lib.dir/VectorLib.c.o CMakeFiles/lib.dir/WavLib.c.o
+/usr/bin/ranlib liblib.a

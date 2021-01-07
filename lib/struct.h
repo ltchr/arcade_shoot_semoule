@@ -1,11 +1,5 @@
 #include <stdbool.h>
 
-typedef struct
-{
-	float x;
-	float y;
-} PointF;
-
 typedef struct SHIP_STRUCT
 {
 	int x;
@@ -39,34 +33,3 @@ typedef struct BULLET_STRUCT
 	int damage;
 
 } Bullet;
-/*
-struct Weapon
-{
-	int type;
-	int ammo;
-	int maxAmmo;
-	int x;
-	int y;
-};
-
-struct Entity
-{
-	int type;
-	char name[MAX_NAME_LENGTH];
-	char defName[MAX_NAME_LENGTH];
-	char groupName[MAX_NAME_LENGTH];
-	char *description;
-	int active;
-	int spawned;
-	int id;
-	float x;
-	float y;
-	int w;
-	int h;
-	float dx;
-	float dy;
-	int alive;
-	//Entity *owner;
-};
-
-*/

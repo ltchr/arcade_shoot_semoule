@@ -12,9 +12,11 @@
 #include "bullets.c"
 #include "ship.c"
 #include "score.c"
+#include "virus.c"
+#include "menu.c"
 
 void gestionEvenement(EvenementGfx evenement);
-void clear(Level* levels); // clear the malloc of levels
+void clear(); // clear the malloc of levels
 
 // Etats touches mouvement
 static int tZ = 0;
@@ -29,20 +31,27 @@ static int Hscore;
 
 static Ship ship; 
 
-static int qtLevel = 2;
 static int currentLevel = 1;
-static Level *levels = NULL;
+
+static Ship *virus;
 
 static Bullet *bullets;
 
+static bool isMenu = true;
+static int choixMenu;
+
 static DonneesImageRGB *spaceShipSprite = NULL;
 static DonneesImageRGB *virusSprite = NULL;
+static DonneesImageRGB *virusBullet = NULL;
+static DonneesImageRGB *shipBullet = NULL;
+static DonneesImageRGB *background = NULL;
 
-void clear(Level* levels){
-	free(levels);
-	levels = NULL;
+void clear(){
 	libereDonneesImageRGB(&spaceShipSprite);
 	libereDonneesImageRGB(&virusSprite);
+	libereDonneesImageRGB(&virusBullet);
+	libereDonneesImageRGB(&shipBullet);
+	libereDonneesImageRGB(&background);
 }
 
 int main(int argc, char **argv)
@@ -55,50 +64,28 @@ int main(int argc, char **argv)
 	
 	return 0;
 }
-// La fonction de gestion des evenements, appelee automatiquement par le systeme
-// des qu'un evenement survient
+
 void gestionEvenement(EvenementGfx evenement)
 {
-	if (levels == NULL){
-		levels = (Level*)malloc(qtLevel*sizeof(Level));
-	}
-
 	switch (evenement)
 	{
 		case Initialisation:
 			score = 0;
 			Hscore = 0;
 
-		//	spaceShipSprite = lisBMPRGB("../img/ISEN.bmp");
 			spaceShipSprite = lisBMPRGB("../img/Main_character.bmp");
 			virusSprite = lisBMPRGB("../img/virus.bmp");
+			virusBullet = lisBMPRGB("../img/virusbullet.bmp");
+			shipBullet = lisBMPRGB("../img/playerbullet.bmp");
+			background = lisBMPRGB("../img/background.bmp");
 
 			ship = initShip();
-
-			// Init levels
-			for (int i = 0; i < qtLevel; ++i){
-				levels[i].qtVirusPerLvl = (i + 1)*3;
-				levels[i].hasBoss = false;
-				levels[i].allDead = false;
-				for (int j = 0; j < levels[i].qtVirusPerLvl; ++j){
-					levels[i].virus[j].x = j*150;
-					levels[i].virus[j].y = (int)hauteurFenetre()*0.7;
-					levels[i].virus[j].xdir = 0;
-					levels[i].virus[j].ydir = -1;
-					levels[i].virus[j].width = 128;
-					levels[i].virus[j].height = 128;
-					levels[i].virus[j].life = 100;
-				}
-			}
+			// Init virus
+			virus = initVirus(currentLevel);
+			
+			
 			bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
 
-/*			PosXY pos;
-			pos.x = largeurFenetre()/2;
-			pos.y = hauteurFenetre()/2;
-				
-			Joueur* joueur = new_joueur(pos, 10.0f, 10.0f);
-			joueur->move((Entite*)joueur, pos, 5.0f, 5.0f);
-*/
 			demandeTemporisation(FPS);
 			break;
 		
@@ -107,31 +94,55 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Affichage:
-			effaceFenetre (255, 255, 255);
-		
+
 			//Gestion direction mouvement
 			ship.ydir += (tZ+tS);
 			ship.xdir += (tD+tQ);
-			
-		
-			if (!gameover && !levels[currentLevel].allDead){
-				checkCollisions(ship, bullets, getSize(), levels, currentLevel);
-				drawBullets(bullets, getSize());
-				for (int i = 0; i < levels[currentLevel].qtVirusPerLvl; ++i){
-					showShip(levels[currentLevel].virus[i].x - levels[currentLevel].virus[i].width/2, levels[currentLevel].virus[i].y - levels[currentLevel].virus[i].height/2, virusSprite);
+
+
+			if (isMenu){
+				choixMenu = afficheMenuStart();
+				if (choixMenu== 1){
+					isMenu = false;
 				}
-				moveShip(&ship);
-				moveShipCollide(&ship);
-				showShip(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
-				
-				showScore(score);
-			}else{
-				if(score > Hscore){
-					Hscore = score;
-				}
-				currentLevel = 1;
-				clear(levels);
 			}
+			switch(choixMenu){
+				case 1:
+					showImage(0, 0, background);
+					if (!gameover && !isMenu){
+
+						if(!checkEnemyLeft(virus)){
+						 	currentLevel++;
+			                virus = initVirus(currentLevel);
+						}
+						checkCollisions(ship, bullets, virus);
+						drawBullets(bullets, shipBullet);
+						for (int i = 0; i < getVirusQt(); ++i){
+							if (virus[i].life>0){
+								showImage(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
+								//moveShip(&virus[i]);
+							}
+						}
+						moveShip(&ship);
+						moveShipCollide(&ship);
+						showImage(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
+						showLevel(currentLevel);
+					}
+					break;
+
+				case 2:
+				break;
+
+				case 3:
+					if(score > Hscore){
+						Hscore = score;
+					}
+					currentLevel = 1;
+					clear();
+				break;
+			}
+		
+			showScore(score);
 
 			break;
 			
@@ -159,15 +170,7 @@ void gestionEvenement(EvenementGfx evenement)
 						
 					case ' ':
 						;
-						//resize(bullets, getSize(), getSize()+10);
-						//resize(bullets, getSize()*sizeof(Bullet), getSize()*sizeof(Bullet)+10);
-						int i = 0;
-						for(; i < getSize(); i++) {
-							if(bullets[i].del == true) {
-								break;
-							}
-						}
-						bullets[i] = newBullet(ship.x, ship.y+ship.height/2, true);
+						bullets = copyTab(bullets, ship.x, ship.y+ship.height/2, true);
 
 						break;
 				}
