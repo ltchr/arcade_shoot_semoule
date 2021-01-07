@@ -42,10 +42,16 @@ static int choixMenu;
 
 static DonneesImageRGB *spaceShipSprite = NULL;
 static DonneesImageRGB *virusSprite = NULL;
+static DonneesImageRGB *virusBullet = NULL;
+static DonneesImageRGB *shipBullet = NULL;
+static DonneesImageRGB *background = NULL;
 
 void clear(){
 	libereDonneesImageRGB(&spaceShipSprite);
 	libereDonneesImageRGB(&virusSprite);
+	libereDonneesImageRGB(&virusBullet);
+	libereDonneesImageRGB(&shipBullet);
+	libereDonneesImageRGB(&background);
 }
 
 int main(int argc, char **argv)
@@ -69,6 +75,9 @@ void gestionEvenement(EvenementGfx evenement)
 
 			spaceShipSprite = lisBMPRGB("../img/Main_character.bmp");
 			virusSprite = lisBMPRGB("../img/virus.bmp");
+			virusBullet = lisBMPRGB("../img/virusbullet.bmp");
+			shipBullet = lisBMPRGB("../img/playerbullet.bmp");
+			background = lisBMPRGB("../img/background.bmp");
 
 			ship = initShip();
 			// Init virus
@@ -85,7 +94,6 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 			
 		case Affichage:
-			effaceFenetre (255, 255, 255);
 
 			//Gestion direction mouvement
 			ship.ydir += (tZ+tS);
@@ -100,6 +108,7 @@ void gestionEvenement(EvenementGfx evenement)
 			}
 			switch(choixMenu){
 				case 1:
+					showImage(0, 0, background);
 					if (!gameover && !isMenu){
 
 						if(!checkEnemyLeft(virus)){
@@ -107,16 +116,16 @@ void gestionEvenement(EvenementGfx evenement)
 			                virus = initVirus(currentLevel);
 						}
 						checkCollisions(ship, bullets, virus);
-						drawBullets(bullets, getSize());
+						drawBullets(bullets, shipBullet);
 						for (int i = 0; i < getVirusQt(); ++i){
 							if (virus[i].life>0){
-								showShip(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
+								showImage(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
 								//moveShip(&virus[i]);
 							}
 						}
 						moveShip(&ship);
 						moveShipCollide(&ship);
-						showShip(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
+						showImage(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
 						showLevel(currentLevel);
 					}
 					break;

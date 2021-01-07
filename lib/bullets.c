@@ -162,15 +162,15 @@ Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
 	return newBullets;
 }
 
-void drawBullets(Bullet *bullets, int size){
-	for (int i = 0; i < size; i++){
+void drawBullets(Bullet *bullets, DonneesImageRGB *image){
+	for (int i = 0; i < getSize(); i++){
 		if(!bullets[i].del) {
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
 			}else {
 				bullets[i].y -= bullets[i].speed;
 			}
-			showBullet(bullets[i].x, bullets[i].y);
+			showImage(bullets[i].x, bullets[i].y, image);
 		}
 	}
 }

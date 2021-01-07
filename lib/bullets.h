@@ -11,7 +11,7 @@ Bullet newBullet(int x, int y, bool isAlly);
 Bullet createBullet();
 
 
-void drawBullets(Bullet *bullets, int size);
+void drawBullets(Bullet *bullets, DonneesImageRGB *image);
 static void showBullet(int x, int y); // show bullet at a x y
 void destroyBullets(void);
 int getSize();

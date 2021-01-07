@@ -39,10 +39,8 @@ void moveShip(Ship *ship){
 	ship->ydir = 0;
 }
 
-void showShip(int x, int y, DonneesImageRGB *image){
+void showImage(int x, int y, DonneesImageRGB *image){
 	if (image != NULL) {
 		ecrisImage(x, y, image->largeurImage, image->hauteurImage, image->donneesRGB);
 	}
 }
-
-
