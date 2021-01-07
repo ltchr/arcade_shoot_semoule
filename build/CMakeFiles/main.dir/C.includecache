@@ -12,6 +12,8 @@ bullets.h
 
 ../lib/bullets.h
 
+../lib/menu.c
+
 ../lib/score.c
 score.h
 ../lib/score.h
@@ -79,4 +81,6 @@ score.c
 /home/adri/Documents/ISEN/alg/C/shootSemoule/arcade_shoot_semoule/score.c
 virus.c
 /home/adri/Documents/ISEN/alg/C/shootSemoule/arcade_shoot_semoule/virus.c
+menu.c
+/home/adri/Documents/ISEN/alg/C/shootSemoule/arcade_shoot_semoule/menu.c
 

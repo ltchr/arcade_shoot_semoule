@@ -3,6 +3,7 @@
 
 CMakeFiles/main.dir/main.c.o: ../lib/bullets.c
 CMakeFiles/main.dir/main.c.o: ../lib/bullets.h
+CMakeFiles/main.dir/main.c.o: ../lib/menu.c
 CMakeFiles/main.dir/main.c.o: ../lib/score.c
 CMakeFiles/main.dir/main.c.o: ../lib/score.h
 CMakeFiles/main.dir/main.c.o: ../lib/ship.c

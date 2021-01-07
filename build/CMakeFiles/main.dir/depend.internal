@@ -4,6 +4,7 @@
 CMakeFiles/main.dir/main.c.o
  ../lib/bullets.c
  ../lib/bullets.h
+ ../lib/menu.c
  ../lib/score.c
  ../lib/score.h
  ../lib/ship.c

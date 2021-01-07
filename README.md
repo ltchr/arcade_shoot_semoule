@@ -48,3 +48,14 @@ https://github.com/ttroy50/cmake-examples
 http://en.wikipedia.org/wiki/Opaque_pointer#C
 
 
+virus sont pas supprimés
+move shoot virus
+[tableau] score + hscore -> fichier
+image background
+reduire taille ennemies
+nouveaux niveaux
+afficher current lvl
+
+menu
+son yannick
+variante ennemies

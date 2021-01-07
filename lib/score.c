@@ -10,3 +10,17 @@ void showScore(int score){
 	afficheChaine(str, 20, largeurFenetre()*0.025, hauteurFenetre()*0.95);
 	free(str);
 }
+
+void showLevel(int currentLevel){
+	char lvlName[] = "niveau: ";
+	int levelLength = snprintf(NULL, 0, "%d", currentLevel);
+	char* str = malloc(levelLength + sizeof(lvlName));
+	//snprintf(str, levelLength + 1, "%d", currentLevel);
+	snprintf(str, sizeof(str)+2, "%s%d", lvlName, currentLevel);
+
+	couleurCourante(80, 80, 100);
+	epaisseurDeTrait(2);
+	afficheChaine(str, 20, largeurFenetre()*0.87, hauteurFenetre()*0.025);
+	free(str);
+}
+

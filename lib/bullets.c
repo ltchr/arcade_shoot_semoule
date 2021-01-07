@@ -142,8 +142,6 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 		return true;
 
 	return false;
-
-
 }
 
 Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
@@ -152,8 +150,8 @@ Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
 
 	for (int j = 0; j < getSize(); ++j){
 		if (bullets[j].ally){
-			for (int i = 0; i < enemyNumbers(1); ++i){
-				if(!bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
+			for (int i = 0; i < getVirusQt(); ++i){
+				if(virus[i].life > 0 && !bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
 					virus[i].life -= bullets[j].damage;
 					bullets[j].del = true;
 					newBullets = removeBullet(bullets);
@@ -164,17 +162,12 @@ Bullet *checkCollisions(Ship ship, Bullet *bullets, Ship *virus){
 	return newBullets;
 }
 
-
-// nombre de bullets à false
-// copie de tableau sur un nouveau tableau sans les false
-
 void drawBullets(Bullet *bullets, int size){
 	for (int i = 0; i < size; i++){
 		if(!bullets[i].del) {
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
-			}
-			else {
+			}else {
 				bullets[i].y -= bullets[i].speed;
 			}
 			showBullet(bullets[i].x, bullets[i].y);
@@ -187,15 +180,6 @@ static void showBullet(int x, int y){
 	cercle(x, y, 5);
 }
 
-
-
 int getSize(){
 	return bulletsSize;
 }
-
-/*
-void destroyBullets(void){
-	free(bullets);
-	bullets = NULL;
-}
-*/

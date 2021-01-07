@@ -13,6 +13,7 @@
 #include "ship.c"
 #include "score.c"
 #include "virus.c"
+#include "menu.c"
 
 void gestionEvenement(EvenementGfx evenement);
 void clear(); // clear the malloc of levels
@@ -35,6 +36,9 @@ static int currentLevel = 1;
 static Ship *virus;
 
 static Bullet *bullets;
+
+static bool isMenu = true;
+static int choixMenu;
 
 static DonneesImageRGB *spaceShipSprite = NULL;
 static DonneesImageRGB *virusSprite = NULL;
@@ -82,31 +86,53 @@ void gestionEvenement(EvenementGfx evenement)
 			
 		case Affichage:
 			effaceFenetre (255, 255, 255);
-		
+
 			//Gestion direction mouvement
 			ship.ydir += (tZ+tS);
 			ship.xdir += (tD+tQ);
-			
-		
-			if (!gameover && checkEnemyLeft(virus)){
-				checkCollisions(ship, bullets, virus);
-				drawBullets(bullets, getSize());
-				for (int i = 0; i < enemyNumbers(1); ++i){
-					if (virus[i].life>0){
-						showShip(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
-					}
+
+
+			if (isMenu){
+				choixMenu = afficheMenuStart();
+				if (choixMenu== 1){
+					isMenu = false;
 				}
-				moveShip(&ship);
-				moveShipCollide(&ship);
-				showShip(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
-				
-			}else{
-				if(score > Hscore){
-					Hscore = score;
-				}
-				currentLevel = 1;
-				clear();
 			}
+			switch(choixMenu){
+				case 1:
+					if (!gameover && !isMenu){
+
+						if(!checkEnemyLeft(virus)){
+						 	currentLevel++;
+			                virus = initVirus(currentLevel);
+						}
+						checkCollisions(ship, bullets, virus);
+						drawBullets(bullets, getSize());
+						for (int i = 0; i < getVirusQt(); ++i){
+							if (virus[i].life>0){
+								showShip(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
+								//moveShip(&virus[i]);
+							}
+						}
+						moveShip(&ship);
+						moveShipCollide(&ship);
+						showShip(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
+						showLevel(currentLevel);
+					}
+					break;
+
+				case 2:
+				break;
+
+				case 3:
+					if(score > Hscore){
+						Hscore = score;
+					}
+					currentLevel = 1;
+					clear();
+				break;
+			}
+		
 			showScore(score);
 
 			break;

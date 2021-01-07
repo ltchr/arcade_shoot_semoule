@@ -4,7 +4,7 @@ static int qtEnemy = 0;
 
 bool checkEnemyLeft(Ship *virus) {
 	int livingEnemy = 0;
-	for(int j = 0; j < qtEnemy; ++j) {
+	for(int j = 0; j < getVirusQt(); ++j) {
 		if (virus[j].life > 0) {
 			livingEnemy++;
 		}
@@ -16,25 +16,26 @@ bool checkEnemyLeft(Ship *virus) {
 	}
 }
 
-int enemyNumbers(int level) {
-	return level * 2;
+// getMaxVirusPerLevel
+int getVirusQt() {
+	return qtEnemy;
 }
 
-
 Ship *initVirus(int level){
-	qtEnemy = enemyNumbers(level);
+	qtEnemy = level*2;
 	Ship *virus;
-	virus = (Ship*)malloc(qtEnemy*sizeof(Ship));
-	if (virus != NULL){
-		for (int j = 0; j < qtEnemy; ++j){
-			virus[j].x = j*150 + 64;
-			virus[j].y = (int)hauteurFenetre()*0.7;
-			virus[j].xdir = 0;
-			virus[j].ydir = -1;
-			virus[j].width = 128;
-			virus[j].height = 128;
-			virus[j].life = 100;
-		}
-		return virus;
+	virus = (Ship*)malloc(getVirusQt()*sizeof(Ship));
+	if (virus == NULL){
+		exit(EXIT_FAILURE);
 	}
+	for (int j = 0; j < getVirusQt(); ++j){
+		virus[j].x = j*150 + 32;
+		virus[j].y = (int)hauteurFenetre()*0.7;
+		virus[j].xdir = 0;
+		virus[j].ydir = -1;
+		virus[j].width = 64;
+		virus[j].height = 64;
+		virus[j].life = 100;
+	}
+	return virus;
 }
