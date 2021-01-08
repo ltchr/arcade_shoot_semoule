@@ -23,7 +23,11 @@ bool checkEnemyLeft(Ship *virus) {
 
 
 int generatePosX(){
-	return (int)(valeurAleatoire()*largeurFenetre()-50);
+	return (int)(320 + (valeurAleatoire()*(largeurFenetre()-720)));
+}
+
+int generatePosY(){
+	return (int)(valeurAleatoire()*200);
 }
 
 Ship *initVirus(int level){
@@ -37,8 +41,14 @@ Ship *initVirus(int level){
 		virus[j].width = 64;
 		virus[j].height = 64;
 		virus[j].x = generatePosX();
-		virus[j].y = (int)hauteurFenetre()-virus[j].height;
-		virus[j].xdir = 0;
+		virus[j].y = (int)hauteurFenetre()+virus[j].height + generatePosY();
+		int randomval = valeurAleatoire();
+		if(randomval > 0.5) {
+			virus[j].xdir = 10;
+		}
+		else {
+			virus[j].xdir = -10;
+		}
 		virus[j].ydir = -1;
 		virus[j].life = 100;
 		virus[j].speed = 1;
@@ -49,11 +59,11 @@ Ship *initVirus(int level){
 }
 
 void moveVirusCollide(Ship *ship){
-	if(ship->x+ship->width/2 > largeurFenetre() ){
-		ship->xdir = -1;
+	if(ship->x+ship->width/2 > largeurFenetre()-320 ){
+		ship->xdir = -10;
 	} 
-	if(ship->x-ship->width/2 < 0 ){
-		ship->xdir = 1;
+	if(ship->x-ship->width/2 < 320 ){
+		ship->xdir = 10;
 	} 
 	if(ship->y-ship->height/2 < 0 ){
 		ship->life = 0;

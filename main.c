@@ -107,14 +107,51 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 		
 		case Temporisation:
+		
+			
+			if (!gameover && !isMenu){
+				ship.ydir += (tZ+tS);
+				ship.xdir += (tD+tQ);
+				if(!checkEnemyLeft(virus)){
+					resetBullets(bullets);
+		            timer = (int)tempsReel();
+				 	currentLevel++;
+		            virus = initVirus(currentLevel);
+		            while (tempsReel()-timer<2){
+		            	//draw score of the lvl
+		            }
+		        	ship.x = largeurFenetre()/2;
+		        	ship.y = 0;
+
+				}
+				for (int i = 0; i < getVirusQt(); ++i){
+					if (virus[i].life>0){
+						
+						moveVirus(&virus[i]);
+						if (virus[i].reloadTime > valeurAleatoire()*10){
+							bullets = copyTab(bullets, virus[i].x, virus[i].y-virus[i].height/2, false);
+							timer = tempsReel();
+							virus[i].reloadTime = 0;									
+						}else{
+							virus[i].reloadTime = (int)tempsReel()-timer;
+						}
+					}
+				}
+				
+				if(checkCollisionsBullet(ship, bullets, virus, &score)) {
+					gameover = true;
+				}
+
+				moveShip(&ship);
+				moveShipCollide(&ship);
+			}
 			rafraichisFenetre();
 			break;
 			
 		case Affichage:
 
 			//Gestion direction mouvement
-			ship.ydir += (tZ+tS);
-			ship.xdir += (tD+tQ);
+
 
 
 			if (isMenu){
@@ -127,38 +164,13 @@ void gestionEvenement(EvenementGfx evenement)
 				case 1:
 					showImage(0, 0, background);
 					if (!gameover && !isMenu){
-						if(!checkEnemyLeft(virus)){
-			                timer = (int)tempsReel();
-						 	currentLevel++;
-			                virus = initVirus(currentLevel);
-			                while (tempsReel()-timer<2){
-			                	//draw score of the lvl
-			                }
-		                	ship.x = largeurFenetre()/2;
-		                	ship.y = 0;
-
-						}
-						if(checkCollisionsBullet(ship, bullets, virus, &score)) {
-							gameover = true;
-						}
-						drawBullets(bullets, shipBullet, virusBullet);
 						
 						for (int i = 0; i < getVirusQt(); ++i){
-							if (virus[i].life>0){
+							if(virus[i].life>0) {
 								showImage(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
-								moveVirus(&virus[i]);
-								if (virus[i].reloadTime > valeurAleatoire()*10){
-									bullets = copyTab(bullets, virus[i].x, virus[i].y-virus[i].height/2, false);
-									timer = tempsReel();
-									virus[i].reloadTime = 0;									
-								}else{
-									virus[i].reloadTime = (int)tempsReel()-timer;
-								}
 							}
 						}
-
-						moveShip(&ship);
-						moveShipCollide(&ship);
+						drawBullets(bullets, shipBullet, virusBullet);
 						showImage(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
 						showLevel(currentLevel);
 					}
@@ -214,7 +226,7 @@ void gestionEvenement(EvenementGfx evenement)
 						
 					case ' ':
 						;
-						bullets = copyTab(bullets, ship.x, ship.y+ship.height/2, true);
+						bullets = copyTab(bullets, ship.x +5, ship.y+ship.height/2, true);
 
 						break;
 				}

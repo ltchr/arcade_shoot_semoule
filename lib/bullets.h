@@ -17,3 +17,4 @@ bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score)
 void drawBullets(Bullet *bullets, DonneesImageRGB *imageally,DonneesImageRGB *imageenemy);
 int getSize();
 void initSize();
+void resetBullets(Bullet *bullets);
