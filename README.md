@@ -37,10 +37,11 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo <path>
 
 
 
-## MEMO TODO
+## TODO
+[tableau] score + hscore -> fichier
+son de tir et musique de fond
+variante ennemies
 Animations de sprite, thread pour séparer la logique du jeu et les animations en temps réel
-Probleme affichages des entités si le x, y et hors de la fenetre
-gestion des ennemis à revoir, [actuellement] bloqué à cause du rezise des bullets (seg fault)
 
 
 ## Sources
@@ -50,9 +51,3 @@ http://en.wikipedia.org/wiki/Opaque_pointer#C
 ## License
 
 * Source code is licensed under MIT
-
-
-
-[tableau] score + hscore -> fichier
-son
-variante ennemies
