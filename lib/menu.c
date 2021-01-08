@@ -1,4 +1,21 @@
-int afficheMenuStart (int Hscore, DonneesImageRGB *fond){	
+
+void showMenucore(int Hscore)
+{
+	if (Hscore>0){
+		char strAdd[] = "Your high score ";
+		char strIs[] = "is: ";
+
+		int HscoreLength = snprintf(NULL, 0, "%d", Hscore);
+		char* str = malloc(HscoreLength + sizeof(strAdd) + sizeof(strIs));
+		sprintf(str, "%s%s%d", strAdd, strIs, Hscore);
+
+		couleurCourante (250, 255, 255);
+		afficheChaine(str, 20, 500, 200);
+		free(str);
+	}
+}
+
+int afficheMenuStart (int Hscore){	
 	int valRet = 0;
 
 	char recclavier; 
@@ -21,12 +38,8 @@ int afficheMenuStart (int Hscore, DonneesImageRGB *fond){
 	afficheChaine ("Start : Press < s >", 20, 610, 320);
 	
 	//affichage meilleurScore
-	couleurCourante (250, 255, 255);
-	epaisseurDeTrait (2);
-	afficheChaine (" High Score ", 20, 650, 280);
-	
 	showMenucore(Hscore);
-	//showImage(0, 0, fond);
+
 	
 
 	recclavier=caractereClavier();
@@ -45,16 +58,38 @@ int afficheMenuStart (int Hscore, DonneesImageRGB *fond){
 	return valRet;
 }
 
-void showMenucore(int Hscore)
-{
-	int HscoreLength = snprintf(NULL, 0, "%d", Hscore);
-	char* str = malloc(HscoreLength + 1);
-	char Highscore[] = " Hscore ";
-	snprintf(str, HscoreLength + 2, "%d", Hscore);
 
-	couleurCourante(50, 50, 150);
-	epaisseurDeTrait(3);
-	afficheChaine(str, 20, largeurFenetre()*0.025, hauteurFenetre()*0.95);
-	free(str);
+/*
+char* initScoreName(char *chaineReponse, int taille){
+	chaineReponse = (char*)malloc(sizeof(char)*taille);
+	for (int i = 0; i < taille; ++i){
+		chaineReponse[i] = '\0';
+	}
+	return chaineReponse;
 }
 
+
+void afficher(char *tab, int taille){
+	printf("taille est %d\nles valeurs sont \n", taille);
+	for (int i = 0; i < taille; i++){
+		printf("[%d]: %c ",i, *(tab+i));
+	}
+	printf("\n");
+}
+
+void typeScoreName(char *chaineReponse, int *index, char value, int taille){
+	if(*index == taille){
+		taille += 10;
+		chaineReponse = (char *)realloc(chaineReponse, sizeof(char) * taille);
+	}
+	chaineReponse[*index] = value;
+	*index = *index + 1;
+	printf("saisie de: %c a la case %ls et taille %d\n", value, index, taille);
+	for (int i = 0; i < *index; ++i){
+		ecrisCaractere(chaineReponse[*index]);
+	}
+	printf("\n");
+	afficher(chaineReponse, taille);
+}
+
+*/

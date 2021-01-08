@@ -40,6 +40,17 @@ static Bullet *bullets;
 static bool isMenu;
 static int choixMenu;
 
+/*
+// owner s name of the score
+static bool isTyping = false; // True: est en saisie de text. False: saisie pas
+
+char chaineText[] = {"Nom du joueur"};
+static int indexScore = 0;
+static int taille = 10;
+static char *chaineReponse = NULL;
+static char *chaineSelect = {"En selection"};
+*/
+
 static unsigned int timer = 0;
 
 static DonneesImageRGB *spaceShipSprite = NULL;
@@ -47,7 +58,6 @@ static DonneesImageRGB *virusSprite = NULL;
 static DonneesImageRGB *virusBullet = NULL;
 static DonneesImageRGB *shipBullet = NULL;
 static DonneesImageRGB *background = NULL;
-static DonneesImageRGB *fondMenu = NULL;
 
 void clear(){
 	libereDonneesImageRGB(&spaceShipSprite);
@@ -55,11 +65,10 @@ void clear(){
 	libereDonneesImageRGB(&virusBullet);
 	libereDonneesImageRGB(&shipBullet);
 	libereDonneesImageRGB(&background);
-	libereDonneesImageRGB(&fondMenu);
 }
 
 void newGame(){
-	currentLevel = 100;
+	currentLevel = 1;
 	choixMenu = -1;
 	isMenu = true;
 	gameover = false;
@@ -70,11 +79,13 @@ void newGame(){
 	bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
 
 	timer = (int)tempsReel();
+//	chaineReponse = initScoreName(chaineReponse, taille);
 }
 
 void endLevel(){
 	free(bullets);
 	free(virus);
+
 }
 
 void endGame(){
@@ -111,7 +122,6 @@ void gestionEvenement(EvenementGfx evenement)
 			virusBullet = lisBMPRGB("../img/virusbullet.bmp");
 			shipBullet = lisBMPRGB("../img/playerbullet.bmp");
 			background = lisBMPRGB("../img/background.bmp");
-			fondMenu = lisBMPRGB("../img/fond.bmp");
 
 			newGame();
 			
@@ -126,12 +136,11 @@ void gestionEvenement(EvenementGfx evenement)
 					bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
 					initSize();
 
-
 		            timer = (int)tempsReel();
 				 	currentLevel++;
 		            virus = initVirus(currentLevel);
 		            while (tempsReel()-timer<2){
-		            	//draw score of the lvl
+		            	// draw score of the lvl
 		            }
 		        	ship.x = largeurFenetre()/2;
 		        	ship.y = 0;
@@ -139,7 +148,6 @@ void gestionEvenement(EvenementGfx evenement)
 
 				for (int i = 0; i < getVirusQt(); ++i){
 					if (virus[i].life>0){
-						
 						moveVirus(&virus[i]);
 						if (virus[i].reloadTime > valeurAleatoire()*10){
 							bullets = copyTab(bullets, virus[i].x, virus[i].y-virus[i].height/2, false);
@@ -151,7 +159,7 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 				}
 				int dmg;
-				if(dmg = checkCollisionsBullet(ship, bullets, virus, &score) > 0) {
+				if((dmg = checkCollisionsBullet(ship, bullets, virus, &score)) > 0) {
 					ship.life -= dmg;
 					if (ship.life<=0){
 						gameover = true;
@@ -171,7 +179,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 
 			if (isMenu){
-				choixMenu = afficheMenuStart(Hscore, background);
+				choixMenu = afficheMenuStart(Hscore);
 				if (choixMenu != -1){
 					isMenu = false;
 				}
@@ -181,6 +189,7 @@ void gestionEvenement(EvenementGfx evenement)
 					showImage(0, 0, background);
 					if (!gameover && !isMenu){
 						showScore(score);
+						showLives(ship.life);
 
 						for (int i = 0; i < getVirusQt(); ++i){
 							if(virus[i].life>0) {
@@ -194,7 +203,16 @@ void gestionEvenement(EvenementGfx evenement)
 					else {
 						isMenu = true;
 						endGame();
-						//choixMenu = -1;
+
+						/*
+						// ajout de saisie du pseudo pour le score
+						afficheChaine(chaineText, 25, 0 , hauteurFenetre()-100);
+						if (isTyping){
+							couleurCourante(50, 50, 55);
+							afficheChaine(chaineSelect, 20, 0 , hauteurFenetre()-50);				
+						}
+						afficheChaine(chaineReponse, 20, 0 , hauteurFenetre()-200);
+						*/
 						newGame();
 					}
 					break;
@@ -237,6 +255,7 @@ void gestionEvenement(EvenementGfx evenement)
 						bullets = copyTab(bullets, ship.x +5, ship.y+ship.height/2, true);
 
 						break;
+				
 				}
 			}
 			else {

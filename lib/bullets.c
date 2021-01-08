@@ -35,7 +35,6 @@ Bullet createBullet(){
 	tempbul.damage = 25;
 
 	return tempbul;
-
 }
 
 Bullet newBullet(int x, int y, bool isAlly){
@@ -160,7 +159,7 @@ int *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score){
 					printf("%d\n", ship.life);
 					bullets[j].del = true;
 					newBullets = removeBullet(bullets);
-					return bullets[j].damage;
+					return (int)bullets[j].damage;
 				}
 			}
 		}
