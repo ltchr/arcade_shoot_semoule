@@ -25,19 +25,19 @@ static int tS = 0;
 static int tD = 0;
 
 //static bool pleinEcran = false;
-static bool gameover = false;
+static bool gameover;
 static int score;
 static int Hscore;
 
 static Ship ship; 
 
-static int currentLevel = 1;
+static int currentLevel;
 
 static Ship *virus;
 
 static Bullet *bullets;
 
-static bool isMenu = true;
+static bool isMenu;
 static int choixMenu;
 
 static unsigned int timer = 0;
@@ -54,6 +54,26 @@ void clear(){
 	libereDonneesImageRGB(&virusBullet);
 	libereDonneesImageRGB(&shipBullet);
 	libereDonneesImageRGB(&background);
+}
+
+void newGame(){
+	currentLevel = 1;
+	choixMenu = -1;
+	isMenu = true;
+	gameover = false;
+	initSize();
+
+	ship = initShip();
+	virus = initVirus(currentLevel);
+	bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
+
+	timer = (int)tempsReel();
+}
+
+void endGame(){
+	score = 0;
+	free(bullets);
+	free(virus);
 }
 
 int main(int argc, char **argv)
@@ -81,15 +101,8 @@ void gestionEvenement(EvenementGfx evenement)
 			shipBullet = lisBMPRGB("../img/playerbullet.bmp");
 			background = lisBMPRGB("../img/background.bmp");
 
-			ship = initShip();
-			// Init virus
-			virus = initVirus(currentLevel);
+			newGame();
 			
-			
-			bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
-
-			timer = (int)tempsReel();
-
 			demandeTemporisation(FPS);
 			break;
 		
@@ -106,7 +119,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 			if (isMenu){
 				choixMenu = afficheMenuStart();
-				if (choixMenu== 1){
+				if (choixMenu != -1){
 					isMenu = false;
 				}
 			}
@@ -125,11 +138,10 @@ void gestionEvenement(EvenementGfx evenement)
 		                	ship.y = 0;
 
 						}
-						bool result = checkCollisionsBullet(ship, bullets, virus, &score);
-						if(result == true) {
+						if(checkCollisionsBullet(ship, bullets, virus, &score)) {
 							gameover = true;
 						}
-						drawBullets(bullets, shipBullet,virusBullet);
+						drawBullets(bullets, shipBullet, virusBullet);
 						
 						for (int i = 0; i < getVirusQt(); ++i){
 							if (virus[i].life>0){
@@ -152,6 +164,9 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 					else {
 						isMenu = true;
+						endGame();
+						//choixMenu = -1;
+						newGame();
 					}
 					break;
 
@@ -165,6 +180,10 @@ void gestionEvenement(EvenementGfx evenement)
 					currentLevel = 1;
 					clear();
 				break;
+
+				default: 
+					isMenu = true;
+					break;
 			}
 		
 			showScore(score);

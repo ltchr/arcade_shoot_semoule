@@ -13,14 +13,14 @@ Ship initShip(void){
 	tempShip.life = 100;
 	tempShip.speed = 8;	
 	tempShip.score = 0;	
-	tempShip.reloadTime = 0;	
+	tempShip.reloadTime = 0;
 
 	return tempShip;
 }
 
 void moveShipCollide(Ship *ship){
-	if(ship->x+ship->width/2 > largeurFenetre() ){
-		ship->x = largeurFenetre()-ship->width/2;
+	if(ship->x+ship->width/2 > largeurFenetre()+20 ){
+		ship->x = largeurFenetre()+20-ship->width/2;
 	} 
 	if(ship->y+ship->height/2 > hauteurFenetre() ){
 		ship->y = hauteurFenetre()-ship->height/2;

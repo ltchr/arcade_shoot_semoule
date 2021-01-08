@@ -48,7 +48,6 @@ https://github.com/ttroy50/cmake-examples
 http://en.wikipedia.org/wiki/Opaque_pointer#C
 
 
-move shoot virus
 [tableau] score + hscore -> fichier
 
 menu

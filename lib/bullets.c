@@ -1,6 +1,6 @@
 #include "bullets.h"
 
-static int bulletsSize = INITIAL_BULLET_DRAW_CAPACITY;
+static int bulletsSize;
 
 void cercle(float centreX, float centreY, float rayon){
 	const int Pas = 20; // Nombre de secteurs pour tracer le cercle
@@ -151,7 +151,7 @@ bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score)
 				if(virus[i].life > 0 && !bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, virus[i].x, virus[i].y, virus[i].width, virus[i].height)){
 					virus[i].life -= bullets[j].damage;
 					if (virus[i].life<=0){
-						*score+=1;
+						*score+=virus[i].score;
 					}
 					bullets[j].del = true;
 					newBullets = removeBullet(bullets);
@@ -159,7 +159,7 @@ bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score)
 			}
 		}
 		else {
-			if(!bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, ship.x, ship.y, ship.width, ship.height)){
+			if(!bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, ship.x+10, ship.y, ship.width-20, ship.height)){
 				ship.life -= bullets[j].damage;
 				if (ship.life<=0){
 					return true;
@@ -189,5 +189,9 @@ void drawBullets(Bullet *bullets, DonneesImageRGB *imageally,  DonneesImageRGB *
 
 int getSize(){
 	return bulletsSize;
+}
+
+void initSize(){
+	bulletsSize = INITIAL_BULLET_DRAW_CAPACITY;
 }
 
