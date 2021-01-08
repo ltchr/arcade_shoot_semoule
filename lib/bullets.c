@@ -140,7 +140,7 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 	return false;
 }
 
-Bullet *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score){
+bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score){
 	Bullet *newBullets = NULL;
 	newBullets = bullets;
 
@@ -158,19 +158,31 @@ Bullet *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *scor
 				}
 			}
 		}
+		else {
+			if(!bullets[j].del && isCollide(bullets[j].x, bullets[j].y, bullets[j].width, bullets[j].height, ship.x, ship.y, ship.width, ship.height)){
+				ship.life -= bullets[j].damage;
+				if (ship.life<=0){
+					return true;
+				}
+				bullets[j].del = true;
+				newBullets = removeBullet(bullets);
+			}
+		}
 	}
-	return newBullets;
+	return false;
 }
 
-void drawBullets(Bullet *bullets, DonneesImageRGB *image){
+void drawBullets(Bullet *bullets, DonneesImageRGB *imageally,  DonneesImageRGB *imageenemy){
 	for (int i = 0; i < getSize(); i++){
 		if(!bullets[i].del) {
 			if(bullets[i].ally) {
 				bullets[i].y += bullets[i].speed;
+				showImage(bullets[i].x, bullets[i].y, imageally);
 			}else {
 				bullets[i].y -= bullets[i].speed;
+				showImage(bullets[i].x, bullets[i].y, imageenemy);
 			}
-			showImage(bullets[i].x, bullets[i].y, image);
+			
 		}
 	}
 }

@@ -125,9 +125,11 @@ void gestionEvenement(EvenementGfx evenement)
 		                	ship.y = 0;
 
 						}
-						checkCollisionsBullet(ship, bullets, virus, &score);
-
-						drawBullets(bullets, shipBullet);
+						bool result = checkCollisionsBullet(ship, bullets, virus, &score);
+						if(result == true) {
+							gameover = true;
+						}
+						drawBullets(bullets, shipBullet,virusBullet);
 						
 						for (int i = 0; i < getVirusQt(); ++i){
 							if (virus[i].life>0){
@@ -147,6 +149,9 @@ void gestionEvenement(EvenementGfx evenement)
 						moveShipCollide(&ship);
 						showImage(ship.x-ship.width/2, ship.y-ship.height/2, spaceShipSprite);	
 						showLevel(currentLevel);
+					}
+					else {
+						isMenu = true;
 					}
 					break;
 
