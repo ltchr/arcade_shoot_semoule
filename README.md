@@ -6,7 +6,6 @@ This project was possible with the help of
 * JaysonNrt
 * Hivanhoe438
 
-
 ## What's Shoot The Virus
 It's a game inspired from space invaders developped in C with Gfxlib.
 A french library based on Opengl.

@@ -159,7 +159,7 @@ void gestionEvenement(EvenementGfx evenement)
 					}
 				}
 				int dmg;
-				if((dmg = checkCollisionsBullet(ship, bullets, virus, &score)) > 0) {
+				if(dmg = checkCollisionsBullet(ship, bullets, virus, &score) > 0) {
 					ship.life -= dmg;
 					if (ship.life<=0){
 						gameover = true;
