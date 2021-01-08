@@ -10,7 +10,7 @@ void showMenucore(int Hscore)
 		sprintf(str, "%s%s%d", strAdd, strIs, Hscore);
 
 		couleurCourante (250, 255, 255);
-		afficheChaine(str, 20, 500, 200);
+		afficheChaine(str, 20, 600, 200);
 		free(str);
 	}
 }
