@@ -47,6 +47,7 @@ static DonneesImageRGB *virusSprite = NULL;
 static DonneesImageRGB *virusBullet = NULL;
 static DonneesImageRGB *shipBullet = NULL;
 static DonneesImageRGB *background = NULL;
+static DonneesImageRGB *fondMenu = NULL;
 
 void clear(){
 	libereDonneesImageRGB(&spaceShipSprite);
@@ -54,10 +55,11 @@ void clear(){
 	libereDonneesImageRGB(&virusBullet);
 	libereDonneesImageRGB(&shipBullet);
 	libereDonneesImageRGB(&background);
+	libereDonneesImageRGB(&fondMenu);
 }
 
 void newGame(){
-	currentLevel = 1;
+	currentLevel = 100;
 	choixMenu = -1;
 	isMenu = true;
 	gameover = false;
@@ -70,10 +72,19 @@ void newGame(){
 	timer = (int)tempsReel();
 }
 
-void endGame(){
-	score = 0;
+void endLevel(){
 	free(bullets);
 	free(virus);
+}
+
+void endGame(){
+	if(score > Hscore){
+		Hscore = score;
+	}
+	currentLevel = 1;
+
+	score = 0;
+	endLevel();
 }
 
 int main(int argc, char **argv)
@@ -100,6 +111,7 @@ void gestionEvenement(EvenementGfx evenement)
 			virusBullet = lisBMPRGB("../img/virusbullet.bmp");
 			shipBullet = lisBMPRGB("../img/playerbullet.bmp");
 			background = lisBMPRGB("../img/background.bmp");
+			fondMenu = lisBMPRGB("../img/fond.bmp");
 
 			newGame();
 			
@@ -107,13 +119,14 @@ void gestionEvenement(EvenementGfx evenement)
 			break;
 		
 		case Temporisation:
-		
-			
 			if (!gameover && !isMenu){
 				ship.ydir += (tZ+tS);
 				ship.xdir += (tD+tQ);
 				if(!checkEnemyLeft(virus)){
-					resetBullets(bullets);
+					bullets = initBullets(0, INITIAL_BULLET_DRAW_CAPACITY);
+					initSize();
+
+
 		            timer = (int)tempsReel();
 				 	currentLevel++;
 		            virus = initVirus(currentLevel);
@@ -122,8 +135,8 @@ void gestionEvenement(EvenementGfx evenement)
 		            }
 		        	ship.x = largeurFenetre()/2;
 		        	ship.y = 0;
-
 				}
+
 				for (int i = 0; i < getVirusQt(); ++i){
 					if (virus[i].life>0){
 						
@@ -137,9 +150,12 @@ void gestionEvenement(EvenementGfx evenement)
 						}
 					}
 				}
-				
-				if(checkCollisionsBullet(ship, bullets, virus, &score)) {
-					gameover = true;
+				int dmg;
+				if(dmg = checkCollisionsBullet(ship, bullets, virus, &score) > 0) {
+					ship.life -= dmg;
+					if (ship.life<=0){
+						gameover = true;
+					}
 				}
 
 				moveShip(&ship);
@@ -155,7 +171,7 @@ void gestionEvenement(EvenementGfx evenement)
 
 
 			if (isMenu){
-				choixMenu = afficheMenuStart();
+				choixMenu = afficheMenuStart(Hscore, background);
 				if (choixMenu != -1){
 					isMenu = false;
 				}
@@ -164,7 +180,8 @@ void gestionEvenement(EvenementGfx evenement)
 				case 1:
 					showImage(0, 0, background);
 					if (!gameover && !isMenu){
-						
+						showScore(score);
+
 						for (int i = 0; i < getVirusQt(); ++i){
 							if(virus[i].life>0) {
 								showImage(virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virusSprite);
@@ -186,10 +203,6 @@ void gestionEvenement(EvenementGfx evenement)
 				break;
 
 				case 3:
-					if(score > Hscore){
-						Hscore = score;
-					}
-					currentLevel = 1;
 					clear();
 				break;
 
@@ -198,14 +211,9 @@ void gestionEvenement(EvenementGfx evenement)
 					break;
 			}
 		
-			showScore(score);
-
 			break;
 			
 		case Clavier:
-			//printf("Etat: %d\n",etatCharacterClavier());
-			//printf("Touche: %d\n",caractereClavier());
-			
 			if(etatCharacterClavier()) {
 				switch(caractereClavier()) {
 					case 'z':
@@ -254,68 +262,9 @@ void gestionEvenement(EvenementGfx evenement)
 						break;
 				}
 			}
-			
-			/*
-	
-			switch (caractereClavier())
-			{
-				
-				case 'Z':
-				case 'z':
-					ship.ydir = 1;
-				break;
-				case 'S':
-				case 's':
-					ship.ydir = -1;
-				break;
-				case 'Q':
-				case 'q':
-					ship.xdir = -1;
-				break;
-				case 'D':
-				case 'd':
-					ship.xdir = 1;
-				break;
-
-				case 'P':
-				case 'p':
-					termineBoucleEvenements();
-					break;
-
-				case 'F':
-				case 'f':
-					pleinEcran = !pleinEcran;
-					if (pleinEcran)
-						modePleinEcran();
-					else
-						redimensionneFenetre(LargeurFenetre, HauteurFenetre);
-					break;
-
-				case 'R':
-				case 'r':
-					// Configure le systeme pour generer un message Temporisation
-					// toutes les 20 millisecondes (rapide)
-					demandeTemporisation(20);
-					break;
-
-				case 'L':
-				case 'l':
-					// Configure le systeme pour generer un message Temporisation
-					// toutes les 100 millisecondes (lent)
-					demandeTemporisation(100);
-					break;
-
-				case 'W':
-				case 'w':
-					// Configure le systeme pour ne plus generer de message Temporisation
-					demandeTemporisation(-1);
-					break;
-			}
-			*/
 			break;
 			
 		case ClavierSpecial:
-			//printf("ASCII %d\n", toucheClavier());
 			if(toucheClavier() == ToucheFlecheHaut){
 				ship.ydir += 1;
 			}

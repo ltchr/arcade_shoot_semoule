@@ -5,7 +5,7 @@ void showScore(int score){
 	char* str = malloc(scoreLength + 1);
 	snprintf(str, scoreLength + 1, "%d", score);
 
-	couleurCourante(50, 50, 150);
+	couleurCourante(250, 250, 150);
 	epaisseurDeTrait(3);
 	afficheChaine(str, 20, largeurFenetre()*0.025, hauteurFenetre()*0.95);
 	free(str);
@@ -18,10 +18,14 @@ void showLevel(int currentLevel){
 	//snprintf(str, levelLength + 1, "%d", currentLevel);
 	snprintf(str, sizeof(str)+3, "%s%d", lvlName, currentLevel);
 
-	couleurCourante(80, 80, 100);
+	couleurCourante(250, 250, 250);
 	epaisseurDeTrait(2);
 	afficheChaine(str, 20, largeurFenetre()*0.82, hauteurFenetre()*0.025);
 	free(str);
+}
+
+void showGui(int data){
+
 }
 
 void showEndLeveLScore(int currentLevel, int score){

@@ -1,6 +1,10 @@
 # ![Shoot The Virus](img/spaceship.png) 
 
 Arcade 2D game in C with Gfxlib.
+This project was possible with the help of
+* Neitherman83
+* JaysonNrt
+* Hivanhoe438
 
 
 ## What's Shoot The Virus
@@ -11,8 +15,6 @@ Be ready to fight epic boss.
 Save us from the pandemic and kill all the viruses.
 
 
-## Features
-Incomming
 
 ## Development process
 Tested on Linux Mint 19.x, 20.x, Ubuntu.
@@ -34,8 +36,6 @@ Release build
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo <path>
 
 
-## License
-Incomming
 
 ## MEMO TODO
 Animations de sprite, thread pour séparer la logique du jeu et les animations en temps réel
@@ -47,9 +47,12 @@ gestion des ennemis à revoir, [actuellement] bloqué à cause du rezise des bul
 https://github.com/ttroy50/cmake-examples
 http://en.wikipedia.org/wiki/Opaque_pointer#C
 
+## License
+
+* Source code is licensed under MIT
+
+
 
 [tableau] score + hscore -> fichier
-
-menu
-son yannick
+son
 variante ennemies

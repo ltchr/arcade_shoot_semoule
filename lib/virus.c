@@ -21,13 +21,12 @@ bool checkEnemyLeft(Ship *virus) {
 	}
 }
 
-
 int generatePosX(){
 	return (int)(320 + (valeurAleatoire()*(largeurFenetre()-720)));
 }
 
-int generatePosY(){
-	return (int)(valeurAleatoire()*200);
+int generatePosY(int level){
+	return (int)(valeurAleatoire()*(level*80));
 }
 
 Ship *initVirus(int level){
@@ -41,7 +40,7 @@ Ship *initVirus(int level){
 		virus[j].width = 64;
 		virus[j].height = 64;
 		virus[j].x = generatePosX();
-		virus[j].y = (int)hauteurFenetre()+virus[j].height + generatePosY();
+		virus[j].y = (int)hauteurFenetre()+virus[j].height + generatePosY(level);
 		int randomval = valeurAleatoire();
 		if(randomval > 0.5) {
 			virus[j].xdir = 10;

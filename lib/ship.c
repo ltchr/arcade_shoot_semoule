@@ -10,7 +10,7 @@ Ship initShip(void){
 	tempShip.ydir = 0;
 	tempShip.width = 128;
 	tempShip.height = 128;
-	tempShip.life = 100;
+	tempShip.life = 5;
 	tempShip.speed = 8;	
 	tempShip.score = 0;	
 	tempShip.reloadTime = 0;

@@ -45,41 +45,21 @@ Bullet newBullet(int x, int y, bool isAlly){
 	b.y = y;
 	b.width = 10;
 	b.height = 10;
-	b.speed = 10;
 	b.del = false;
 	b.ally = isAlly;
-	b.damage = 500;
-
+	b.speed = 10;
+	if (isAlly){
+		b.damage = 50;
+	}else{
+		b.damage = 50;
+	}
 	return b;
 }
 
-
 /*
-Bullet *resize(Bullet *array, int oldSize, int newSize){
-	//Bullet *newArray;
-	
-	printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
-	if (newSize > getSize()){
-		oldSize = bulletsSize;
-		bulletsSize = newSize;
-		printf("bulletsSize : %d ; %d ; %d ; %d\n", bulletsSize, oldSize, newSize, getSize());
-		array = realloc(array, bulletsSize * sizeof(Bullet));
-		//array = initBullets(oldSize, newSize);
-	}
-	//bulletsSize = newSize > oldSize ? newSize : oldSize;
-	
-	//newArray = realloc(array, bulletsSize);
-	// newArray = malloc(newSize);
-	// memset(newArray, 0, newSize);
-	// memcpy(newArray, array, bulletsSize);
-	// newArray = initBullets(oldSize, newSize);
-	// free(array);
-	
-	// return newArray;
-	return array;
-}*/
-
-
+* Agrandit le tableau de balles 
+* @return le nouveau tableau de balle
+*/
 Bullet *copyTab(Bullet *bullets, int x, int y, bool isAlly){
 	Bullet *newArray = (Bullet*)malloc((getSize()+1)*sizeof(Bullet));
 
@@ -92,11 +72,13 @@ Bullet *copyTab(Bullet *bullets, int x, int y, bool isAlly){
 	return newArray;
 }
 
+/*
+* suppression des balles inutiles
+*/
 Bullet *removeBullet(Bullet *bullets){
 	Bullet *newArray = (Bullet*)malloc((getSize())*sizeof(Bullet));
 	int newCptBullets=0;
 
-	printf("getSize %d\n", getSize());
 	//memcpy(newArray, bullets, getSize());
 	for(int cptBullets = 0; cptBullets < getSize(); cptBullets++) {
 		if(!bullets[cptBullets].del){
@@ -107,6 +89,10 @@ Bullet *removeBullet(Bullet *bullets){
 	return newArray;
 }
 
+
+/*
+* Verifie la collision entre 2 rectangles a 2 positons
+*/
 bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, int height2){
 	int coinX1 = x;
 	int coinY1 = y;
@@ -140,7 +126,11 @@ bool isCollide(int x, int y, int width, int height, int x2, int y2, int width2, 
 	return false;
 }
 
-bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score){
+/*
+* Verifie les collisions entre balles/joueurs allies et ennemies
+* @return les degats de la collision
+*/
+int *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score){
 	Bullet *newBullets = NULL;
 	newBullets = bullets;
 
@@ -153,7 +143,9 @@ bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score)
 		else {
 			if (bullets[j].ally){
 				for (int i = 0; i < getVirusQt(); ++i){
-					if(virus[i].life > 0 && !bullets[j].del && isCollide(bullets[j].x - bullets[j].width/2, bullets[j].y - bullets[j].height/2, bullets[j].width, bullets[j].height, virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virus[i].width, virus[i].height)){
+					if((virus[i].life > 0 &&
+					 !bullets[j].del && 
+					 isCollide(bullets[j].x - bullets[j].width/2, bullets[j].y - bullets[j].height/2, bullets[j].width, bullets[j].height, virus[i].x - virus[i].width/2, virus[i].y - virus[i].height/2, virus[i].width, virus[i].height))){
 						virus[i].life -= bullets[j].damage;
 						if (virus[i].life<=0){
 							*score+=virus[i].score;
@@ -165,17 +157,15 @@ bool *checkCollisionsBullet(Ship ship, Bullet *bullets, Ship *virus, int *score)
 			}
 			else {
 				if(!bullets[j].del && isCollide(bullets[j].x - bullets[j].width/2, bullets[j].y - bullets[j].height/2, bullets[j].width, bullets[j].height, ship.x - (ship.width/2)+20, ship.y - (ship.height/2), ship.width-40, ship.height-50)){
-					ship.life -= bullets[j].damage;
-					if (ship.life<=0){
-						return true;
-					}
+					printf("%d\n", ship.life);
 					bullets[j].del = true;
 					newBullets = removeBullet(bullets);
+					return bullets[j].damage;
 				}
 			}
 		}
 	}
-	return false;
+	return 0;
 }
 
 void drawBullets(Bullet *bullets, DonneesImageRGB *imageally,  DonneesImageRGB *imageenemy){
@@ -201,13 +191,12 @@ void initSize(){
 	bulletsSize = INITIAL_BULLET_DRAW_CAPACITY;
 }
 
-
-void resetBullets(Bullet *bullets) {
-
+/*void resetBullets(Bullet *bullets) {
 	Bullet *newBullets = NULL;
 	newBullets = bullets;
 	for(int i = 0; i < getSize(); i++) {
 		bullets[i].del = true;
 		newBullets = removeBullet(bullets);
 	}
-}
+}*/
+
